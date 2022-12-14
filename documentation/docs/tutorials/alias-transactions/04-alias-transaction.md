@@ -8,19 +8,19 @@ keywords:
 - transaction
 ---
 
-# Performing an Alias Transaction
+# Create an Alias Transaction
 
-The State Controller of an Alias can perform a transaction so that the Alias transits to a new state. The transaction generates a new Alias Output which Alias ID is the original one of the Alias. Remember that the alias ID remains constant regardless the Alias Output that holds the funds and the state metadata. It is the Alias Output Id the one which changes and once "spent" it is pruned from the ledger.
+The State Controller of an Alias can perform transactions that change the Alias to a new state. The transaction generates a new Alias Output with the Alias ID of the original Alias. Remember that the Alias ID remains constant regardless of the Alias Output that holds the funds and the state metadata. The **Alias Output Id** changes, and once it is "spent", it is pruned from the ledger.
 
 ## Preparation
 
-In order to perform this transaction it is needed:
+To create this transaction, you will need the following:
 
-* A Shimmer Node. You can use the [Shimmer testnet nodes](https://api.testnet.shimmer.network).
+* A Shimmer Node. You can use the [Shimmer Testnet nodes](https://api.testnet.shimmer.network).
 
-* The Alias ID of your Alias, in hexadecimal format `0x6dd4...`
+* The Alias ID of your Alias, in hexadecimal format `0x6dd4...`.
 
-* The keys of the state controller of your Alias
+* The keys of the state controller of your Alias.
 
 ```typescript
 const client = new SingleNodeClient(API_ENDPOINT, { powProvider: new NeonPowProvider() });
@@ -32,7 +32,7 @@ const stateControllerPrivateKey = "0xa060ff...";
 
 ## Query Alias Output
 
-The first thing that it is needed is to find the Alias Output of your Alias and the easiest way to do it is through a query to the indexation plugin by Alias ID. Observe that we need to obtain the full output details as we would need to use it as input of our transaction.
+You will first need to find the Alias Output of your Alias. The easiest way to do so is through a query to the [indexation plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/) by Alias ID. Observe that you need to obtain the full output details as we need to use them as input for the transaction.
 
 ```typescript
 const indexerPlugin = new IndexerPluginClient(client);
@@ -44,11 +44,11 @@ const initialAliasOutputDetails = await client.output(consumedOutputId);
 const initialAliasOutput: IAliasOutput = initialAliasOutputDetails.output as IAliasOutput;
 ```
 
-## Assign the new state
+## Assign the New State
 
-In order to continue we can create the new Alias Output by just cloning the one received in the previous step, and afterwards increment the `stateIndex` and set the new `stateMetadata`. Now we are ready to define our transaction. Observe that we ensure we assign the correct aliasId to our new Alias Output. 
+To continue, you can create the new Alias Output by cloning the one received in the [previous step](#query-alias-output), and then increment the `stateIndex` and set the new `stateMetadata`. Now, you are ready to define the transaction. You should ensure that you assign the correct `aliasId` to your new Alias Output.
 
-As the size of the proof does not change in between state changes, our new Alias Output does not need to increase its storage deposit.
+As the proof size does not change between state changes, your new Alias Output does not need to increase its storage deposit.
 
 ```typescript
 const nextAliasOutput: IAliasOutput = JSON.parse(JSON.stringify(initialAliasOutput));
@@ -58,9 +58,9 @@ console.log("New state index: ", nextAliasOutput.stateIndex);
 nextAliasOutput.aliasId = aliasId;
 ```
 
-## Define the transaction
+## Define the Transaction
 
-The transaction to be performed takes as input the original Alias Output and generates a new Alias Output with the new state but, as you know, keeping the original Alias ID.
+The transaction takes the original Alias Output as input and generates a new Alias Output with the new state but keeps the original Alias ID.
 
 ```typescript
 const inputs: IUTXOInput[] = [];
@@ -80,9 +80,9 @@ const transactionEssence: ITransactionEssence = {
 };
 ```
 
-## Provide unlock conditions
+## Provide the Unlock Conditions
 
-The unlock conditions to be provided correspond to the State Controller signature calculated against the transaction essence.
+The unlock conditions you need to provide correspond to the State Controller signature calculated against the transaction essence.
 
 ```typescript
 const wsTsxEssence = new WriteStream();
@@ -107,9 +107,9 @@ const transactionPayload: ITransactionPayload = {
 };   
 ```
 
-## Submit block
+## Submit the Block
 
-And finally we submit the block. After the block is confirmed if you query your Alias Address through the Explorer you will find the new Alias Output with the updated state.
+Finally, you should submit the block. After the block is confirmed, if you query your Alias Address through [the Shimmer Explorer](https://explorer.shimmer.network/shimmer), you will find the new Alias Output with the updated state.
 
 ```typescript
 const block: IBlock = {

@@ -9,25 +9,25 @@ keywords:
 - mint
 ---
 
-# Mint a new Alias
+# Mint a New Alias Address
 
-An Alias Output can be used to store a proof of the world state that is included on the ledger and never pruned. An Alias Output is associated with an Alias ID (also known as Alias Address as we will explain later). An Alias ID remains immutable during its lifetime.
+You can use an [Alias Output](https://wiki.iota.org/shimmer/introduction/explanations/ledger/alias/) to store proof of the world state included in the ledger and never pruned. An Alias Output is associated with an Alias ID (also known as an [Alias Address](#calculate-the-alias-id)). An Alias ID remains immutable during its lifetime.
 
-For instance, an Alias Output can contain a hash or digital signature as a commitment to the state of a certain dynamic data set, as it happens with Smart Contracts. Such proof can be used by a data validator to ensure that the concerned data has not been tampered with. When there is a change in the concerned data, a transition to a new state is recorded on the ledger by a new transaction that generates a new Alias Output conserving the original Alias ID. That is, the Alias ID remains constant whereas a new Alias Output is generated to hold the new state.
+For instance, an Alias Output can contain a hash or digital signature as a commitment to the state of a particular dynamic data set, as it happens with Smart Contracts. A data validator can use such proof to ensure that the concerned data has not been tampered with. When there is a change in the data, a transition to a new state is recorded on the ledger by a new transaction that generates a new Alias Output with the original Alias ID. The Alias ID remains constant, whereas a new Alias Output is generated to hold the new state.
 
-Provided the size of the proof in bytes does not change in between state changes, a new Alias Output does not need to increase its storage deposit.
+Provided the proof size in bytes does not change between state changes, a new Alias Output does not need to increase its storage deposit.
 
-In order to mint a new Alias and generate its genesis, initial Alias Output it is needed:
+To mint a new Alias and generate its genesis, you will need the following:
 
-* A not spent Output that holds enough funds for the minimal storage deposit needed for the genesis Alias Output. In the testnet you can provision funds through the Faucet, as we explained in our [previous tutorial](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/request-funds-from-the-faucet/).
+* An unspent Output that holds enough funds for the minimal storage deposit needed for the genesis Alias Output. In the Testnet, you can [request funds through the Faucet](../value-transactions/request-funds-from-the-faucet/).
 
-* The key pair corresponding to the Shimmer address that owns the former Output as you need to unlock a certain amount of funds to cover the storage deposit of the new minted Alias.
+* The key pair that corresponds to the Shimmer address that owns the output, as you need to unlock a certain amount of funds to cover the storage deposit of the new minted Alias.
 
-* A State Controller Address. The State Controller address private key will be used to unlock the Alias Output of your new Alias so that it can transition to a new state when needed. We explained in our [previous tutorial](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/generate-addresses/) how to create addresses.
+* A State Controller Address. You will use the State Controller address private key to unlock the Alias Output of your new Alias so that it can transition to a new state when needed. If you haven’t generated any addresses before, you can find detailed instructions in the [Send Value Transactions tutorial](../value-transactions/generate-addresses).
 
-* A Governor Address. With the private key of the Governor you will be able to change the State Controller Address or even destroy the Alias.
+* A Governor Address. With the private key of the Governor, you will be able to change the State Controller Address or even destroy the Alias.
 
-* The data you want to store on the Alias Output (represented as an hexadecimal string). Remember the longer the data the higher storage deposit you will need.
+* The data you want to store on the Alias Output (represented as a hexadecimal string). Remember, the longer the data, the higher the storage deposit you will need.
 
 ```typescript
 const consumedOutputId = "0x45678...";
@@ -47,9 +47,9 @@ const client = new SingleNodeClient(API_ENDPOINT, { powProvider: new NeonPowProv
 const protocolInfo = await client.protocolInfo();
 ```
 
-## Define the genesis Alias Output
+## Define the Genesis Alias Output
 
-The genesis (initial) Alias Output needed to mint our Alias can be defined as follows:
+You can define the genesis (initial) Alias Output to mint your Alias with the following snippet:
 
 ```typescript
 const initialAliasId = new Uint8Array(new ArrayBuffer(32));
@@ -80,19 +80,23 @@ const aliasOutput: IAliasOutput = {
 };
 ```
 
-You can observe that `aliasId` is initialized to an hexadecimal string that represents `32` bytes set to `0`. That is the way to ask for a new Alias to be minted. The `stateIndex` is initialized to `0` as this is the initial state. In the unlock conditions the State Controller address and the Governor addresses are specified in their Ed25519 hashed representation.
+The `aliasId` is initialized as a hexadecimal string that represents `32` bytes set to `0`. That is the way to ask for a new Alias to be minted. The `stateIndex` is initialized as `0`, as this is the initial state. In the unlock conditions, the State Controller and Governor addresses are specified in their Ed25519 hashed representation.
 
 ## Define the Transaction Essence
 
-The transaction we are defining involves an input (the output that holds at least enough funds to cover the storage deposit of the new Alias), and two outputs. The new Alias Output and another Basic Output with the remaining funds from the original input (that can only be unlocked with the original address that controls the funds). Observe that in this case we are assigning manually an amount to send to the Alias Output (`60000 Glow`) so that it covers its storage deposit. In a real world scenario you may need to do an automatic calculation of the storage deposit as per the byte rent costs published by your node.
+The transaction you are defining involves an input (the output that holds enough funds to cover the storage deposit of the new Alias) and two outputs:
+The new Alias Output
+A Basic Output that holds the remaining funds from the original input. You can only unlock this output with the original address that controls the funds.
 
-For calculating the remaining funds a query is made against the node to obtain the details of the aforementioned consumed output.
+In this case, you manually assign an amount to send to the Alias Output (`60000 Glow`) so that it covers its storage deposit. In a real-world scenario, you may need to automatically calculate the storage deposit as per the byte rent costs published by your node.
+
+You can calculate the remaining funds by sending a query to the node to obtain the details of the consumed output. You can use the following snippet to do so:
 
 ```typescript
  const inputs: IUTXOInput[] = [];
 const outputs: (IAliasOutput | IBasicOutput)[] = [];
 
-// The amount of funds to be sent to an alias output so that it covers its byte costs
+// The number of funds to be sent to an alias output so that it covers its byte costs
 const amountToSend = bigInt("60000");
 
 inputs.push(TransactionHelper.inputFromOutputId(consumedOutputId));
@@ -136,9 +140,9 @@ const transactionEssence: ITransactionEssence = {
 
 ## Issue the Transaction
 
-Once the transaction essence is defined the transaction can be issued the same way as we did in [previous tutorials](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/transfer-funds/#create-a-transaction-payload). The essence has to be signed with the keys of the address that controls the initial output unlocked and which will provide funds for our Alias (the storage deposit as a minimum).
+Once you have defined the transaction essence, you can [issue the transaction](../value-transactions/transfer-funds/#create-a-transaction-payload). You will need to sign the essence with the keys of the address that controls the initial output that will provide funds for the Alias output (the storage deposit as a minimum).
 
-After submitting the corresponding block with the Block ID you can check in the [Tangle Explorer](https://explorer.shimmer.network/testnet) the resulting outputs.
+After submitting the block with the Block ID, you can check the [Tangle Explorer](https://explorer.shimmer.network/testnet) for the resulting outputs.
 
 ```typescript
 const wsTsxEssence = new WriteStream();
@@ -175,7 +179,7 @@ console.log("Block Id:", blockId);
 
 ## Calculate the Alias ID
 
-It is important to understand that the new Alias ID is derived from the Id of the Alias Output and the Id of the Alias Output is derived from the Id of the transaction. The Id of the transaction is a hash of the transaction payload, that can be calculated using the function `computeTransactionIdFromTransactionPayload` as shown below. The Id of the output is calculated using the function `TransactionHelper.outputIdFromTransactionData` and then the Alias Id is the Blake256 hash of such an Output Id. Afterwards you can calculate the Bech32 address corresponding to such an Alias Id using the `Bech32Helper` and specifying that it is an `ALIAS_ADDRESS_TYPE`.
+It is important to understand that the new Alias ID is derived from the ID of the Alias Output, and the ID of the Alias Output is derived from the ID of the transaction. The transaction ID is a hash of the transaction payload, which can be calculated using the function `computeTransactionIdFromTransactionPayload` as shown below. The output ID is calculated using the function [`TransactionHelper.outputIdFromTransactionData`](../../references/client/classes/TransactionHelper#outputidfromtransactiondata), and the Alias Id is the Blake256 hash of an Output Id. You can calculate the Bech32 address corresponding to the Alias Id using the [`Bech32Helper`](../../references/client/classes/Bech32Helper) and specifying that it is an `ALIAS_ADDRESS_TYPE`.
 
 ```typescript
 const blockData: IBlock = await client.block(blockId);
@@ -196,7 +200,7 @@ function computeTransactionIdFromTransactionPayload(payload: ITransactionPayload
 }
 ```
 
-The code above will result in something similar to:
+The code above will result in something similar to the following:
 
 ```text
 Block Id: 0x2817e61f5a559a7521e2e20dfc69f0e184a6fa00109a05fa040a9d6cb6d292e1
@@ -205,4 +209,5 @@ Alias ID: 0x6dd4b53990a862f7afaa19b58c5566970d7c40482547abd50a3a6de9f9ad4b14
 Alias Address: rms1ppkafdfejz5x9aa04gvmtrz4v6ts6lzqfqj50274pgaxm60e4493gdry4ys
 ```
 
-Remember that the Alias ID remains constant and known by every node software regardless the transactions (Alias Outputs generated) issued. That means that you can query, through the Tangle Explorer for instance, the current Alias Output of an Alias Id by just supplying the Alias Id or its representation as a Bech32 address.
+Remember that the Alias ID remains constant and known by every node software regardless of the transactions (Alias Outputs generated) issued. That means you can query through the Tangle Explorer, for instance, the current Alias Output of an Alias Id by just supplying the Alias Id or its representation as a Bech32 address.
+
