@@ -35,13 +35,13 @@ You
 can [download the tutorials codebase](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/shimmer-alias-transaction-tutorial)
 to follow while you read the next sections.
 
-:::warning Running Code Examples
+:::info Running Code Examples
 
 If you plan on using the provided code example, please read the article [How To Run Code Examples](../../how_tos/run_how_tos.mdx).
 
 :::
 
-:::warning Shimmer Addresses and Outputs
+:::note Shimmer Addresses and Outputs
 
 The tutorial's codebase uses several predefined Shimmer addresses and outputs. If you are going to use other addresses, you will need to update the code accordingly. Likewise, the tutorial codebase assumes a particular state of the addresses and outputs. Before executing the code, please ensure your addresses and outputs are in the expected state.
 
@@ -57,7 +57,7 @@ You can run the `mint-new-alias` script by running the following command from th
 npm run mint <outputID>
 ```
 
-where `outputID` shall be the ID of the Output that has enough funds to cover the storage deposit of your newly minted Alias. 
+**Where** `outputID` is the ID of an Output that has enough funds to cover the storage deposit of your newly minted Alias. 
 
 #### Transition Alias Output
 
@@ -67,7 +67,7 @@ You can run the `alias-transaction` script by running the following command from
 npm run alias-transaction <AliasID>
 ```
 
-where `AliasID` is the Alias ID you want to transact with so that it transitions to a new state. 
+**Where** `AliasID` is the Alias ID you want to transact with so that it transitions to a new state. 
 
 ## Create Your package.json File
 

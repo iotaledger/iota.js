@@ -44,6 +44,16 @@ module.exports = {
                         "tutorials/value-transactions/understanding-deposits",
                         "tutorials/value-transactions/sweep-outputs-to-reduce-deposits",
                     ]
+                },
+                {
+                    type: "category",
+                    label: "Alias Transactions",
+                    link: {type: 'doc', id: "tutorials/alias-transactions/introduction",},
+                    items: [
+                        "tutorials/alias-transactions/prepare-the-dev-env",
+                        "tutorials/alias-transactions/mint-new-alias",
+                        "tutorials/alias-transactions/alias-transaction",
+                    ]
                 }
             ]
         },
