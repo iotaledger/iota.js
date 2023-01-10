@@ -78,7 +78,7 @@ const inputsCommitment = TransactionHelper.getInputsCommitment([output1.output, 
 
 const transactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs: [combinedOutput]

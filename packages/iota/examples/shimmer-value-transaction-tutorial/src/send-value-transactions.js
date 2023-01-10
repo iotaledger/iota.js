@@ -64,7 +64,7 @@ outputs.push(remainderBasicOutput);
 const inputsCommitment = TransactionHelper.getInputsCommitment([outputDetails.output]);
 const transactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs

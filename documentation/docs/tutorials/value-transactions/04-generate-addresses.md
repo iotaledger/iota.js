@@ -34,12 +34,14 @@ const addressGeneratorAccountState = {
 };
 const paths: string[] = [];
 for (let i = 0; i < NUM_ADDR; i++) {
-    const path = generateBip44Address(addressGeneratorAccountState);
+    const path = generateBip44Address(addressGeneratorAccountState, COIN_TYPE_SHIMMER);
     paths.push(path);
 
     console.log(`${path}`);
 }
 ```
+
+In this case we are generating addresses for the Shimmer Coin Type.
 
 The script above will generate the following BIP32 paths:
 
@@ -130,7 +132,7 @@ const addressGeneratorAccountState = {
 };
 const paths: string[] = [];
 for (let i = 0; i < NUM_ADDR; i++) {
-    const path = generateBip44Address(addressGeneratorAccountState);
+    const path = generateBip44Address(addressGeneratorAccountState, COIN_TYPE_SHIMMER);
     paths.push(path);
 
     console.log(`${path}`);
