@@ -122,3 +122,7 @@ const block: IBlock = {
 const blockId = await client.blockSubmit(block);
 console.log("Block Id:", blockId);
 ```
+
+## Putting It All Together
+
+The complete source code of this part of the tutorial is available [here](https://github.com/iotaledger/iota.js/blob/feat/stardust/packages/iota/examples/shimmer-alias-transaction-tutorial/src/alias-transaction.ts).

@@ -211,3 +211,6 @@ Alias Address: rms1ppkafdfejz5x9aa04gvmtrz4v6ts6lzqfqj50274pgaxm60e4493gdry4ys
 
 Remember that the Alias ID remains constant and known by every node software regardless of the transactions (Alias Outputs generated) issued. That means you can query through the Tangle Explorer, for instance, the current Alias Output of an Alias Id by just supplying the Alias Id or its representation as a Bech32 address.
 
+## Putting It All Together
+
+The complete source code of this part of the tutorial is available [here](https://github.com/iotaledger/iota.js/blob/feat/stardust/packages/iota/examples/shimmer-alias-transaction-tutorial/src/mint-new-alias.ts).
