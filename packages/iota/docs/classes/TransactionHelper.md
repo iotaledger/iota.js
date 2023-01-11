@@ -14,6 +14,7 @@ Helper methods for Transactions.
 
 - [calculateBlockId](TransactionHelper.md#calculateblockid)
 - [outputIdFromTransactionData](TransactionHelper.md#outputidfromtransactiondata)
+- [transactionIdFromTransactionPayload](TransactionHelper.md#transactionidfromtransactionpayload)
 - [getTransactionEssenceHash](TransactionHelper.md#gettransactionessencehash)
 - [getTransactionPayloadHash](TransactionHelper.md#gettransactionpayloadhash)
 - [inputFromOutputId](TransactionHelper.md#inputfromoutputid)
@@ -73,7 +74,7 @@ ___
 
 ▸ `Static` **outputIdFromTransactionData**(`transactionId`, `outputIndex`): `string`
 
-Returns the outputId from transation id and output index.
+Returns the outputId from transaction id and output index.
 
 #### Parameters
 
@@ -87,6 +88,26 @@ Returns the outputId from transation id and output index.
 `string`
 
 The output id.
+
+___
+
+### transactionIdFromTransactionPayload
+
+▸ `Static` **transactionIdFromTransactionPayload**(`transactionPayload`): `string`
+
+Returns the transactionId from transaction payload.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionPayload` | [`ITransactionPayload`](../interfaces/ITransactionPayload.md) | The transaction payload. |
+
+#### Returns
+
+`string`
+
+The transaction id.
 
 ___
 
