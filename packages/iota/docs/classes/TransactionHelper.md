@@ -14,7 +14,7 @@ Helper methods for Transactions.
 
 - [calculateBlockId](TransactionHelper.md#calculateblockid)
 - [outputIdFromTransactionData](TransactionHelper.md#outputidfromtransactiondata)
-- [transactionIdFromTransactionPayload](TransactionHelper.md#transactionidfromtransactionpayload)
+- [calculateTransactionId](TransactionHelper.md#calculatetransactionid)
 - [getTransactionEssenceHash](TransactionHelper.md#gettransactionessencehash)
 - [getTransactionPayloadHash](TransactionHelper.md#gettransactionpayloadhash)
 - [inputFromOutputId](TransactionHelper.md#inputfromoutputid)
@@ -91,11 +91,11 @@ The output id.
 
 ___
 
-### transactionIdFromTransactionPayload
+### calculateTransactionId
 
-▸ `Static` **transactionIdFromTransactionPayload**(`transactionPayload`): `string`
+▸ `Static` **calculateTransactionId**(`transactionPayload`): `string`
 
-Returns the transactionId from transaction payload.
+Computes the transaction Id from transaction payload.
 
 #### Parameters
 
@@ -107,7 +107,7 @@ Returns the transactionId from transaction payload.
 
 `string`
 
-The transaction id.
+The transaction Id.
 
 ___
 
