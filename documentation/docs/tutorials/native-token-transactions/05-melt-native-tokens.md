@@ -8,29 +8,31 @@ keywords:
 - output
 - melt
 - foundry
-- native
+- native tokens
 - token
 - digital
 - asset
 ---
 
-# Melting native tokens
+# Melting Native Tokens
 
-In this part of the tutorial you will learn how to transition an existing Foundry Output to a new state. Specifically you will learn how to melt the tokens that were transferred to an Output in the [previous part of this tutorial](). This transaction is going to involve three Inputs and three Outputs as follows:
+This section in the tutorial will show you how to transition an existing Foundry Output to a new state. Specifically, how to melt the tokens that were transferred to an Output where you [sent your native tokens](04-native-tokens-transaction.md).
 
-* Input #1 The unspent Output of the Alias Address that controls your Foundry, created in [part 3 of this tutorial]().
-* Input #2. The Foundry Output created in [part 3 of this tutorial](), controlled by your Alias Address and which corresponds to the serial number `1`.
-* Input #3. The UTXO created in [part 4 of this tutorial]() that holds `12` native tokens that you are going to melt by issuing this transaction.
+This transaction will involve three Inputs and three Outputs:
 
-* Output #1 The next Alias Output that captures the state of your Alias Address.
-* Output #2 The next Foundry Output that captures the next state of your Foundry (declaring melted tokens after transaction confirmation)
-* Output #3 The same as Input #3 but without any native token as they will have been melted.
+* **Input #1**: The unspent Output of the Alias Address that controls your Foundry, created when you [minted your native tokens](03-mint-native-tokens.md#prepare-the-alias-address).
+* **Input #2**: The Foundry Output you created when you [minted your native tokens](03-mint-native-tokens.md#define-the-foundry-output), controlled by your [Alias Address](](03-mint-native-tokens.md#prepare-the-alias-address) and corresponds to the serial number `1`.
+* **Input #3**: The UTXO created in [when you sent native tokens](04-native-tokens-transaction.md#define-the-new-native-tokens-output) that holds `12` native tokens that you are going to melt by issuing this transaction.
+
+* **Output #1**: The next Alias Output that captures the state of your Alias Address.
+* **Output #2**: The next Foundry Output that captures the next state of your Foundry. It declares the melted tokens after transaction confirmation.
+* **Output #3**: The same as **Input #3** but without any native tokens, as you will have melted them.
 
 ## Preparation
 
-In order to perform this transaction it is needed:
+To perform the transaction that will melt the native tokens, you will need:
 
-* A Shimmer Node. You can use the [Shimmer testnet nodes](https://api.testnet.shimmer.network).
+* A Shimmer Node. You can use the [Shimmer Testnet nodes](https://api.testnet.shimmer.network).
 
 * The Alias ID of your Alias, in hexadecimal format `0x6dd4...`.
 
@@ -59,13 +61,13 @@ const nativeTokenOwnerPubKey = "0xa5e76a...";
 const nativeTokenOwnerPrivateKey = "0xc4e210...";
 ```
 
-## Set new state of your Alias Address
+## Set the New State of Your Alias Address
 
-In this step you need to transition the Alias Address to a new state, as one of its bound elements, the Foundry, is changing its state.
+In this step, you need to transition the Alias Address to a new state. As one of its bound elements, the Foundry, is changing its state.
 
-### Query Alias Output
+### Query for the Alias Output
 
-First of all you need to find the unspent Alias Output of your Alias Address through a query to the indexing plugin by Alias ID. Observe that you need to obtain the full Output details as you would need to use it as Input of your transaction.
+First, you need to find the unspent Alias Output of your Alias Address through a query to the [indexing plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/) using the Alias ID. You need to obtain the full Output details, as you will need to use it as Input for your transaction.
 
 ```typescript
 const indexerPlugin = new IndexerPluginClient(client);
@@ -77,24 +79,24 @@ const initialAliasOutputDetails = await client.output(consumedOutputID);
 const initialAliasOutput: IAliasOutput = initialAliasOutputDetails.output as IAliasOutput;
 ```
 
-### Assign the new state of the Alias
+### Assign the New State of the Alias
 
-In order to continue you can create the next Alias Output by just cloning the one obtained in the previous step, and afterwards increment the `stateIndex`.
+To continue, you can create the next Alias Output by cloning the one obtained in the [previous step](#query-for-the-alias-output), and then increment the `stateIndex`.
 
 ```typescript
 const nextAliasOutput: IAliasOutput = JSON.parse(JSON.stringify(initialAliasOutput));
 nextAliasOutput.stateIndex++;
 ```
 
-At the end of this step you know both Input #1 and Output #1.
+At the end of this step, you know both **Input #1** and **Output #1**.
 
-## Set new state of your Foundry
+## Set the New State of Your Foundry
 
-In this step you need to transition your Foundry to a new state as some tokens will be put in melted state.
+In this step, you need to transition your Foundry to a new state, as some tokens will be put in **melted** state.
 
-### Query Foundry Output
+### Query for the Foundry Output
 
-The first sub-step to take is to find the unspent Foundry Output you need to transition through a query to the indexing plugin by Alias Address. Observe that you need to obtain the full Output details as you would need to use it as Input of your transaction.
+First, you need to find the unspent Foundry Output to transition by sending a query to the indexing plugin using the Alias Address. You need to obtain the full Output details as you will need to use it as Input for your transaction.
 
 ```typescript
 const aliasIdBech32 = Bech32Helper.toBech32(ALIAS_ADDRESS_TYPE, Converter.hexToBytes(aliasId), protocolInfo.bech32Hrp);
@@ -110,14 +112,13 @@ const foundryOutputID = foundryList.items[0];
 const initialFoundryOutputDetails = await client.output(foundryOutputID);
 const initialFoundryOutput: IFoundryOutput = initialFoundryOutputDetails.output as IFoundryOutput;
 ```
+Keep in mind that you will need to use the ` Bech32Helper.toBech32(bech32Text, humanReadablePart)`(references/client/classes/Bech32Helper/#frombech32) function to convert your Alias ID to a Bech32 address to match the format of the parameter expected by the indexing plugin.
 
-The only detail to take into account in the code above is the conversion from your Alias ID to a Bech32 address to match the format of the parameter expected by the indexing plugin.
+At the end of this step, you know **Input #2**.
 
-At the end of this step you know Input #2.
+### Query for the Native Tokens Output
 
-### Query Native Tokens Output
-
-As you are going to melt all the tokens of your formerly created Output, you need to perform a query to obtain its ID (that you will also need as Input #3 of the transaction) and the amount of native tokens involved (those which token class ID corresponds to the token class ID we calculated in the previous part of this tutorial).
+As you are going to melt all the tokens of your formerly created Output, you need to perform a query to obtain its ID and the number of native tokens involved. You will also use this Output as **Input #3** of the transaction.
 
 ```typescript
 const tokenClassId: string = TransactionHelper.constructTokenId(
@@ -145,14 +146,15 @@ if (!outputWithTokensToMelt.nativeTokens?.some(element => element.id === tokenCl
 }
 ```
 
-You can observe that with the `some` function we check that the Output actually holds native tokens of the expected class ID.
+The `some` function check that the Output actually holds native tokens of the expected class ID.
 
-At the end of this step you know Input #3.
+At the end of this step, you know **Input #3**.
 
-### Set melted tokens on the Foundry
+### Set the Amount of Melted Tokens on the Foundry
 
-Once you know how many tokens are going to be melted you just need to set the `meltedTokens` field of the next Foundry Output.
-We use the  `findIndex` function to ensure we refer to the right token class, as an Output can hold tokens of many classes at the same time. (In this simple case you can check that `index` is equal to `0`).
+Once you know how many tokens you are going to melt, you just need to set the `meltedTokens` field of the next Foundry Output.
+
+As an Output can hold tokens of many classes at the same time, you should use the  `findIndex` function to ensure you are referring to the right token class. In this simple case, you can check that `index` is equal to `0`..
 
 ```typescript
 const index = outputWithTokensToMelt.nativeTokens?.findIndex(element => element.id === tokenClassId);
@@ -160,11 +162,11 @@ const index = outputWithTokensToMelt.nativeTokens?.findIndex(element => element.
 nextFoundryOutput.tokenScheme.meltedTokens = outputWithTokensToMelt.nativeTokens[index].amount;
 ```
 
-At the end of this step you know Output #2.
+At the end of this step, you know **Output #2**.
 
-## Create remainder Output
+## Create the Remainder Output
 
-In this step you need to create the remainder Output. The remainder Output will be just the same as Input #3 with the exception of the native tokens of `tokenClassId` that are removed from the Output.
+In this step, you must create the remainder Output. The remainder Output will be the same as **Input #3** except for the native tokens of `tokenClassId` that are removed from the Output.
 
 ```typescript
 const remainderOutput = JSON.parse(JSON.stringify(outputWithTokensToMelt)) as IBasicOutput;
@@ -175,11 +177,13 @@ remainderOutput.nativeTokens = remainderOutput.nativeTokens?.filter((element) =>
 });
 ```
 
-At the end of this step you know Output #3.
+At the end of this step you know, **Output #3**.
 
 ## Define the transaction
 
-In this step the transaction essence is created.
+### Define the Inputs and Outputs
+
+Now, you can create the transaction essence to melt your native tokens as shown in the following snippet:
 
 ```typescript
 const inputs: IUTXOInput[] = [];
@@ -206,24 +210,24 @@ const transactionEssence: ITransactionEssence = {
 };
 ```
 
-At the end of this step the transaction essence is defined. Remember that it includes three Inputs :
+At the end of this step, you have defined the transaction essence. It includes three Inputs:
 
-* Input #1 from `consumedOutputID` (Unspent Alias Output of the Alias Address)
-* Input #2 from `foundryOutputID` (Unspent Foundry Output owned by the Alias Address)
-* Input #3 from `outputWithTokensToMeltID` (Basic Output holding native tokens)
+* **Input #1**: From `consumedOutputID`, the unspent Alias Output of the Alias Address.
+* **Input #2**: From `foundryOutputID`, the unspent Foundry Output owned by the Alias Address.
+* **Input #3**: From `outputWithTokensToMeltID`, the Basic Output holding native tokens.
 
 And three Outputs:
 
-* Output #1 `nextAliasOutput` (Next Alias Output of the Alias Address)
-* Output #2 `nextFoundryOutput` (Next Foundry Output, now declaring melted tokens)
-* Output #3 `remainderOutput` (remainder of the Basic Output with no native tokens of `tokenClassID`)
+* **Output #1**: `nextAliasOutput`, the next Alias Output of the Alias Address.
+* **Output #2**: `nextFoundryOutput`, the next Foundry Output, now declaring melted tokens.
+* **Output #3**: `remainderOutput`, the remainder of the Basic Output with no native tokens of `tokenClassID`.
 
-## Provide unlocks
+## Provide the Unlocks
 
-In this case three unlocks have to be provided:
+In this case, you need to provide three unlocks::
 
 * The State Controller unlock signature for the Alias Output.
-* The reference to the former to unlock the Foundry Output (remember that the Foundry is controlled by the Alias).
+* The reference to the former to unlock the Foundry Output. Remember that the Alias controls the Foundry.
 * The unlock signature of the controller of the address that holds the native tokens melted.
 
 ```typescript
@@ -263,9 +267,9 @@ const transactionPayload: ITransactionPayload = {
 };
 ```
 
-## Submit block
+## Submit the blockB
 
-And finally you submit the block. After the block is confirmed if you query your Alias Address through the Explorer you will find the new Alias Output with the updated state.
+And finally, you can submit the block. After the block is confirmed, you can query the [Shimmer Explorer](https://explorer.shimmer.network/) for your Alias Address and find the new Alias Output with the updated state.
 
 ```typescript
 const block: IBlock = {
@@ -279,6 +283,13 @@ const blockId = await client.blockSubmit(block);
 console.log("Block Id:", blockId);
 ```
 
+
 ## Putting It All Together
 
-You can find [here]() the source code of the program thar executes all the steps of this part of the tutorial.
+You can download the code to melt native tokens from the [iota.js repository](https://github.com/iotaledger/iota.js/tree/feat/stardust/packages/iota/examples/shimmer-native-token-transaction-tutorial/src/melt-tokens.ts).
+
+
+
+
+
+
