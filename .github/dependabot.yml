@@ -14,3 +14,17 @@ updates:
       ignore:
       - dependency-name: "node-fetch"
         versions: ["3.x", "4.x"]
+
+    - package-ecosystem: npm
+      directory: "/"
+      schedule:
+          interval: weekly
+          day: wednesday
+          time: "06:00"
+          timezone: Europe/Berlin
+      target-branch: "feat/stardust"
+      labels:
+          - L - Awaiting reviews
+          - dependencies
+      versioning-strategy: increase
+
