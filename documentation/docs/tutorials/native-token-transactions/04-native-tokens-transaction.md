@@ -184,7 +184,7 @@ At the end of this step, you have defined **Output #3** and you know the storage
 
 ## Find an Output That Can Cover Storage Costs
 
-Once you know the storage costs, the problem is simply finding a suitable target Output from the Outputs your source address is controlling, as shown in the snippet below. The indexer plugin is used to find the unspent Basic Outputs that can fit your purpose.The `hasNativeTokens` filter condition is set to `false` to avoid conflicts with **Input #1**. Once you have a list of potential Outputs, the first that has the minimal amount of `SMR` you need will be used. **Please take into account that the edge case of obtaining an Output of the exact amount is not covered in this script**.
+Once you know the storage costs, the problem is simply finding a suitable target Output from the Outputs your source address is controlling, as shown in the snippet below. The indexer plugin is used to find the unspent Basic Outputs that can fit your purpose. The `hasNativeTokens` filter condition is set to `false` to avoid conflicts with **Input #1**. Once you have a list of potential Outputs, the first that has the minimal amount of `SMR` you need will be used. **Please take into account that the edge case of obtaining an Output of the exact amount is not covered in this script**.
 
 ```typescript
 const outputList2 = await indexerPlugin.basicOutputs({

@@ -112,7 +112,7 @@ const foundryOutputID = foundryList.items[0];
 const initialFoundryOutputDetails = await client.output(foundryOutputID);
 const initialFoundryOutput: IFoundryOutput = initialFoundryOutputDetails.output as IFoundryOutput;
 ```
-Keep in mind that you will need to use the ` Bech32Helper.toBech32(bech32Text, humanReadablePart)`(references/client/classes/Bech32Helper/#frombech32) function to convert your Alias ID to a Bech32 address to match the format of the parameter expected by the indexing plugin.
+Keep in mind that you will need to use the `Bech32Helper.toBech32(bech32Text, humanReadablePart)`(references/client/classes/Bech32Helper/#frombech32) function to convert your Alias ID to a Bech32 address to match the format of the parameter expected by the indexing plugin.
 
 At the end of this step, you know **Input #2**.
 
@@ -154,7 +154,7 @@ At the end of this step, you know **Input #3**.
 
 Once you know how many tokens you are going to melt, you just need to set the `meltedTokens` field of the next Foundry Output.
 
-As an Output can hold tokens of many classes at the same time, you should use the  `findIndex` function to ensure you are referring to the right token class. In this simple case, you can check that `index` is equal to `0`..
+As an Output can hold tokens of many classes at the same time, you should use the `findIndex` function to ensure you are referring to the right token class. In this simple case, you can check that `index` is equal to `0`.
 
 ```typescript
 const index = outputWithTokensToMelt.nativeTokens?.findIndex(element => element.id === tokenClassId);

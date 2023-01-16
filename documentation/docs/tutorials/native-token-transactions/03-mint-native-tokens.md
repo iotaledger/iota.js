@@ -131,7 +131,7 @@ const foundryOutput: IFoundryOutput = {
 
 ### Create the Token Class ID
 
-To issue native token transactions,  you will need a way torefer to each class of native tokens controlled by each foundry uniquely. You can do it using the class ID, which you can obtain by calculating a hash of the Alias ID, foundry serial output, and the type of token scheme as shown in the following snippet:
+To issue native token transactions,  you will need a way to refer to each class of native tokens controlled by each foundry uniquely. You can do it using the class ID, which you can obtain by calculating a hash of the Alias ID, foundry serial output, and the type of token scheme as shown in the following snippet:
 
 ```typescript
 const tokenClassId: string = TransactionHelper.constructTokenId(
@@ -149,7 +149,7 @@ That token class ID is simply the Foundry ID that will remain immutable regardle
 
 ## Define the Basic Output That Will Hold the Initial Batch of Minted Tokens
 
-As the Foundry has an initial set of minted tokens, you will need a [Basic Output](https://wiki.iota.org/shimmer/introduction/explanations/ledger/simple_transfers/) to hold those native tokens. This new Basic Output will also hold the initial amount of minted native tokens identified through their token class ID. As with other Outputs, you need to set the amount of protocol-defined tokens to `0` as you don't yet know the storage deposit cost.
+As the Foundry has an initial set of minted tokens, you will need a [Basic Output](https://wiki.iota.org/shimmer/introduction/explanations/ledger/simple_transfers/) to hold those native tokens. This new Basic Output will hold the initial amount of minted native tokens identified through their token class ID. As with other Outputs, you need to set the amount of protocol-defined tokens to `0` as you don't know yet the storage deposit cost.
 
 ```typescript
 const nativeTokenOwnerAddress = "0x647f....";
@@ -206,7 +206,7 @@ tokenFundsOutput.amount = tokenFundsStorageDeposit.toString();
 
 This is a complex transaction that involves one input and three different outputs. The input is the Alias Output you obtained through your initial query to the indexer plugin. The Outputs are:
 
-* The next Alias Output of our Alias Address (`nextAliasOutput`).
+* The next Alias Output of your Alias Address (`nextAliasOutput`).
 * The initial Foundry Output (`foundryOutput`).
 * The Basic Output that holds the native token funds initially minted (`tokenFundsOutput`).
 
@@ -236,7 +236,7 @@ const essenceHash = Blake2b.sum256(essenceFinal);
 
 ### Provide the Transaction Signature
 
-Once you have the [created the transaction essence](# create-the-transaction-essence), you need to provide the signature that unlocks your [initial Alias Output](#obtain-the-current-alias-output), the Input of the transaction. Remember that unlocking an Alias Output requires the Private Key of the State Controller Address.
+Once you have the [created the transaction essence](#create-the-transaction-essence), you need to provide the signature that unlocks your [initial Alias Output](#obtain-the-current-alias-output), the Input of the transaction. Remember that unlocking an Alias Output requires the Private Key of the State Controller Address.
 
 ```typescript
 const stateControllerPubKey = "0x55419...";
