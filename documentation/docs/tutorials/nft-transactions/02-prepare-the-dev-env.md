@@ -49,7 +49,7 @@ The tutorial's codebase uses several predefined Shimmer addresses and outputs. I
 
 ### Available Commands
 
-#### Mint Alias Output
+#### Mint new NFT
 
 You can run the `mint-nft` script by running the following command from the example's directory:
 
