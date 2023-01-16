@@ -63,7 +63,7 @@ const nativeTokenOwnerPrivateKey = "0xc4e210...";
 
 ## Set the New State of Your Alias Address
 
-In this step, you need to transition the Alias Address to a new state. As one of its bound elements, the Foundry, is changing its state.
+In this step, you need to transition the Alias Address to a new state, as one of its bound elements, the Foundry, is changing its state.
 
 ### Query for the Alias Output
 
