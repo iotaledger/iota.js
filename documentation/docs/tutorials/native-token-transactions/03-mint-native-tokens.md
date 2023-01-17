@@ -40,7 +40,7 @@ The first step is to ensure that you have enough funds in your initial address t
 
 ## Mint a New Alias ID
 
-You can find information on [minting a new Alias address](../alias-transactions/mint-new-alias.md) in the [Alias transactions tutorial](../alias-transactions/introduction.md).  Please ensure that you transfer enough funds to this Alias so that it can cover later costs related to minting native tokens.
+You can find information on [minting a new Alias address](../alias-transactions/03-mint-new-alias.md) in the [Alias transactions tutorial](../alias-transactions/introduction.md).  Please ensure that you transfer enough funds to this Alias so that it can cover later costs related to minting native tokens.
 
 This tutorial uses the following Alias:
 
