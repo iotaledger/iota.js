@@ -34,15 +34,15 @@ Generate an Output to refund the issuer.
 
 So, the transaction will include two Inputs:
 
-* Input #1 The [NFT Input you minted](03-mint-new-nft.md).
-* Input #2 A Basic Input that holds enough funds to cover the storage deposit of the new NFT Output controlled by the
+* **Input #1** The [NFT Input you minted](03-mint-new-nft.md).
+* **Input #2** A Basic Input that holds enough funds to cover the storage deposit of the new NFT Output controlled by the
   new NFT Owner.
 
 The transaction will also include three Outputs:
 
-* Output #1 The new NFT Output, controlled by the new NFT Owner.
-* Output #2 The refund Output, controlled by the NFT Issuer.
-* Output #3 The Output holding the remaining funds after covering the storage costs of Output #1 (controlled by the NFT
+* **Output #1** The new NFT Output, controlled by the new NFT Owner.
+* **Output #2** The refund Output, controlled by the NFT Issuer.
+* **Output #3** The Output holding the remaining funds after covering the storage costs of **Output #1** (controlled by the NFT
   Owner).
 
 ## Preparation
@@ -87,7 +87,7 @@ const initialNftOutputDetails = await client.output(consumedOutputId);
 const initialNftOutput: INftOutput = initialNftOutputDetails.output as INftOutput;
 ```
 
-At the end of this step you have obtained Input #1 of your transaction.
+At the end of this step you have obtained **Input #1** of your transaction.
 
 ## Set the New Unlock Conditions
 
@@ -114,7 +114,7 @@ nextNftOutput.nftId = nftId;
 nextNftOutput.amount = "0";
 ```
 
-At the end of this step you have defined Output #1 of your transaction.
+At the end of this step you have defined **Output #1** of your transaction.
 
 ## Refund the NFT Issuer
 
@@ -142,7 +142,7 @@ const refundOutput: IBasicOutput = {
 };
 ```
 
-At the end of this step you have defined Output #2 of your transaction.
+At the end of this step you have defined **Output #2** of your transaction.
 
 ## Calculate the NFT Storage Costs
 
@@ -221,7 +221,7 @@ if (!costsOutput) {
 remainderOutput.amount = bigInt(costsOutput.amount).minus(depositNft).toString();
 ```
 
-At the end of this step you have defined Output #3 of your transaction.
+At the end of this step you have defined **Output #3** of your transaction.
 
 ## Define the Transaction
 

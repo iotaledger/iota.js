@@ -78,12 +78,12 @@ the storage costs will be refunded whenever the new owner of the NFT decides to 
 
 ## Define the Transaction
 
-### Add Unlock Conditions
+### Add the Unlock Conditions
 
 Now, you are ready to define the transaction. You should assign the correct `nftId` to your new NFT Output.
 
 As you add more unlock conditions, the storage deposit of the NFT Output increases, but that will be covered with the
-extra funds you supplied when you [created the NFT](03-mint-new-nft.md). Remember that the amount was double the minimum
+extra funds you supplied when you [minted the NFT](03-mint-new-nft.md). Remember that the amount was double the minimum
 one.
 
 ```typescript
@@ -132,7 +132,7 @@ const transactionEssence: ITransactionEssence = {
 };
 ```
 
-### Add Unlock Conditions to the New NFT Output
+### Add the Unlock Conditions to the New NFT Output
 
 The unlock you need to provide correspond to the signature calculated against the transaction essence using the private
 key of the original owner address.

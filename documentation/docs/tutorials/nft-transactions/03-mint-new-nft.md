@@ -15,7 +15,7 @@ keywords:
 
 ---
 
-# Mint a new NFT
+# Mint a New NFT
 
 An [NFT](https://wiki.iota.org/shimmer/introduction/explanations/ledger/nft/) is a unique token on the ledger. Its owner
 controls it through the private key of
