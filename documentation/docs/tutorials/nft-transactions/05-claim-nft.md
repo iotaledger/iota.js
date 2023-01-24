@@ -1,7 +1,8 @@
 ---
-description: "Claim an NFT with iota.js."
+description: "Claim an NFT under conditional transfer with iota.js."
 image: /img/client_banner.png
 keywords:
+
 - tutorial
 - nft
 - output
@@ -11,20 +12,38 @@ keywords:
 - conditional
 - transfer
 - refund
+
 ---
 
 # Claim NFT Under Conditional Transfer
 
-In the [previous section of this tutorial](./04-nft-transaction.md) an NFT was transferred to a new owner. However that transfer was conditional in the sense that, only after refunding the storage costs, the new owner would have complete control of the NFT. In this section you will learn how to refund the issuer of the NFT and gain its complete control. The idea is to issue a [new NFT transaction](./04-nft-transaction.md) that changes the unlock conditions, so that the only remaining unlock condition is the address owner one. On the other hand, it is necessary to involve an additional Input that holds funds to cover the new NFT Output (as its storage deposit has been refunded) and, last but not least, generate an Output to refund the issuer. To sum up, the transaction under discussion will include two inputs:
+In the previous section of this tutorial, you [transferred and NFT](./04-nft-transaction.md) to a new owner. However,
+since you added
+a [storage deposit return unlock condition](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/unlock_conditions/#storage-deposit-return)
+to the transfer, the new owner will need to create a new Output to return the deposit.
 
-* Input #1 The NFT Input generated in the previous section of this tutorial.
-* Input #2 A Basic Input that holds enough funds to cover the storage deposit of the new NFT Output fully controlled by the NFT Owner.
+This section will show you how to refund the issuer of the NFT and gain complete control over the NFT. To do so, you
+will need to do the following:
 
-and three Outputs:
+Issue a [new NFT transaction](./04-nft-transaction.md) that changes the unlock conditions so that the only remaining
+condition is
+the [address](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/unlock_conditions/#address).
 
-* Output #1 The new NFT Output (controlled by the NFT Owner).
-* Output #2 The refund Output (controlled by the NFT Issuer).
-* Output #3 The Output holding the remaining funds after covering the storage costs of Output #1 (controlled by the NFT Owner).
+Create an additional Input with enough funds to cover the storage deposit for the new NFT Output,
+Generate an Output to refund the issuer.
+
+So, the transaction will include two Inputs:
+
+* Input #1 The [NFT Input you minted](03-mint-new-nft.md).
+* Input #2 A Basic Input that holds enough funds to cover the storage deposit of the new NFT Output controlled by the
+  new NFT Owner.
+
+The transaction will also include three Outputs:
+
+* Output #1 The new NFT Output, controlled by the new NFT Owner.
+* Output #2 The refund Output, controlled by the NFT Issuer.
+* Output #3 The Output holding the remaining funds after covering the storage costs of Output #1 (controlled by the NFT
+  Owner).
 
 ## Preparation
 
@@ -34,12 +53,12 @@ To create this transaction, you will need the following:
 
 * The NFT ID of your NFT, in hexadecimal format `0x7d08...`.
 
-* The keys of the address that controls your NFT (remember that it was transferred to a new owner in [part 4](./04-nft-transaction.md)).
+* The keys of the address you [transferred your NFT to](./04-nft-transaction.md).
 
-* A UTXO controlled by the owner of the NFT with enough funds to allow to cover the storage costs of the new NFT Output.
+* A UTXO controlled by the new owner of the NFT with enough funds to cover the new NFT Output storage costs.
 
 ```typescript
-const client = new SingleNodeClient(API_ENDPOINT, { powProvider: new NeonPowProvider() });
+const client = new SingleNodeClient(API_ENDPOINT, {powProvider: new NeonPowProvider()});
 const nodeInfo = await client.info();
 
 const nftOwnerAddr = "0x57d3...";
@@ -48,15 +67,17 @@ const nftOwnerPubKey = "0xd38f...";
 const nftOwnerPrivateKey = "0xc2be...";
 ```
 
-## Query NFT Output
+## Query For the NFT Output
 
-You will first need to find the NFT Output of your NFT. The easiest way to do so is through a query to the [indexation plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/) by NFT ID. Observe that you need to obtain the full Output details as you need to use them as Input for the transaction.
+You will first need to retrieve the NFT Output of your NFT from the network. The easiest way to do so is through a query
+to the [indexation plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/) by NFT ID. You need to obtain the full
+Output details as you need to use them as Input for the transaction.
 
 ```typescript
 const indexerPlugin = new IndexerPluginClient(client);
 const outputList = await indexerPlugin.nft(nftId);
 if (outputList.items.length === 0) {
-    throw new Error ("NFT not found");
+    throw new Error("NFT not found");
 }
 
 const consumedOutputId = outputList.items[0];
@@ -70,13 +91,19 @@ At the end of this step you have obtained Input #1 of your transaction.
 
 ## Set the New Unlock Conditions
 
-To continue, you can create the new NFT Output by cloning the one received in the [previous step](#query-nft-output), and then only keep the address unlock condition and remove the storage cost refund condition. That way you will have full control of the NFT through your address' keys.
+You can create the new NFT Output by cloning the [one received from the node](#query-nft-output), removing
+the [storage deposit return unlock condition](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/unlock_conditions/#storage-deposit-return),
+and only keep
+the [address unlock condition](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/unlock_conditions/#address).
+That way, you will have full control of the NFT through your address keys.
 
-You can also observe that the `amount` field is set to `0`, as you are interested in calculating later the minimum storage deposit needed for your new NFT Output.  Last but not least, you should ensure that you assign the correct `nftId` to your new NFT Output.
+The `amount` field is set to `0`, so you can later calculate the minimum storage deposit needed for your new NFT Output.
+Keep in mind that you should ensure that you assign the correct `nftId` to your new NFT Output, in this case the
+original NFT ID.
 
 ```typescript
 const nextNftOutput: INftOutput = JSON.parse(JSON.stringify(initialNftOutput));
-nextNftOutput.unlockConditions = ;
+nextNftOutput.unlockConditions =;
 
 const nextNftOutput: INftOutput = JSON.parse(JSON.stringify(initialNftOutput));
 nextNftOutput.unlockConditions = nextNftOutput.unlockConditions.filter(
@@ -91,7 +118,9 @@ At the end of this step you have defined Output #1 of your transaction.
 
 ## Refund the NFT Issuer
 
-In this step you need to create a new Basic Output to refund the Issuer of the NFT, so that you take full control of it. Please observe that you don't need to use your own funds to refund the Issuer, just take the `SMR` in deposit in the original NFT Output and transfer it to an Output controlled by the Issuer.
+In this step, you need to create a new Basic Output to refund the Issuer of the NFT so that you take full control over
+it. **You don't need to use your own funds to refund the Issuer**. You only need to take the `SMR` deposited in the
+original NFT Output and transfer it to an Output controlled by the Issuer.
 
 ```typescript
 const refundCondition = initialNftOutput.unlockConditions[1] as IStorageDepositReturnUnlockCondition;
@@ -115,24 +144,28 @@ const refundOutput: IBasicOutput = {
 
 At the end of this step you have defined Output #2 of your transaction.
 
-## Calculate NFT Storage Costs
+## Calculate the NFT Storage Costs
 
-In this step you are going to calculate the storage costs so that you have an estimation of the minimum amount of funds that should be held by a transaction Output covering them.
+Once you have returned the original storage deposit, you will need to calculate the storage costs for your new NFT. This
+way, you will have an estimation of the minimum amount of funds that should be held by a transaction Output covering
+them.
 
 ```typescript
 const depositNft = bigInt(TransactionHelper.getStorageDeposit(nextNftOutput, nodeInfo.protocol.rentStructure));
 nextNftOutput.amount = depositNft.toString();
 ```
 
-At the end of this stage you have set the right amounts to cover NFT storage costs.
+At the end of this step, you have set the right amounts to cover NFT storage deposits.
 
-## Cover Storage Costs
+## Cover Storage Deposits
 
-The aim of this step is to find a Basic Output owned by the NFT owner that can cover the NFT storage costs. As it was explained in previous tutorials, the minimal amount of funds is determined by the storage cost of such an NFT plus the storage costs of the Output holding the remainder funds.
+Once you have [calculated the storage deposit](#calculate-the-nft-storage-costs), you will need to find a Basic Output
+owned by the new NFT owner that can cover the deposit. The minimal amount of funds is determined by the storage cost of
+the NFT plus the storage costs of the Output holding the remainder funds.
 
 ### Define the Remainder Output
 
-The remainder Output is just a Basic Output.
+The remainder Output is just a Basic Output, as shown below:
 
 ```typescript
 const remainderOutput: IBasicOutput = {
@@ -155,9 +188,11 @@ const totalCost = depositNft.plus(remainderOutputCost);
 
 At the end of this sub-step you know the total cost that should be covered by your Output at a minimum.
 
-### Find Output with enough funds
+### Find an Output With Enough Funds
 
-Finding the right Basic Output it is a matter of querying the indexation plugin. Observe that it is checked that the Output has not been spent yet.
+You can find the right Basic Output by querying
+the [indexation plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/). You should check that the Output has not
+been spent yet.
 
 ```typescript
  const basicOutputList = await indexerPlugin.basicOutputs({
@@ -190,7 +225,7 @@ At the end of this step you have defined Output #3 of your transaction.
 
 ## Define the Transaction
 
-In this step you need to define the transaction essence as follows:
+The next thing you need to do is define the transaction essence, as shown bellow:
 
 ```typescript
 const inputs: IUTXOInput[] = [];
@@ -217,7 +252,7 @@ const transactionEssence: ITransactionEssence = {
 At the end of this step, you have created the transaction essence. It includes two Inputs :
 
 * **Input #1**: `consumedOutputId`, the last NFT unspent Output of your NFT.
-* **Input #2**: `costsOutputId` which pays the storage costs.
+* **Input #2**: `costsOutputId`, which pays the storage costs.
 
 And three Outputs:
 
@@ -227,7 +262,8 @@ And three Outputs:
 
 ## Unlock the Outputs
 
-The unlock you need to provide correspond to the signature calculated against the transaction essence using the private key of the NFT Owner. The second Input is also unlocked by the same signature.
+The unlock condition you need to provide corresponds to the signature calculated against the transaction essence using
+the private key of the NFT Owner. The same signature also unlocks the second Input.
 
 ```typescript
 const essenceHash = TransactionHelper.getTransactionEssenceHash(transactionEssence);
@@ -255,7 +291,9 @@ const transactionPayload: ITransactionPayload = {
 
 ## Submit the Block
 
-Finally, you should submit the block. After the block is confirmed, if you query your NFT ID through [the Shimmer Explorer](https://explorer.shimmer.network/shimmer), you will find the new NFT Output with the updated state.
+Finally, you should submit the block. After the block is confirmed, if you query your NFT ID
+through [the Shimmer Explorer](https://explorer.shimmer.network/shimmer), you will find the new NFT Output with the
+updated state.
 
 ```typescript
 const block: IBlock = {
@@ -271,4 +309,6 @@ console.log("Block Id:", blockId);
 
 ## Putting It All Together
 
-The complete source code of this part of the tutorial is available in the [official iota.js GitHub repository](https://github.com/iotaledger/iota.js/blob/feat/stardust/packages/iota/examples/shimmer-nft-transaction-tutorial/src/claim-nft.ts).
+The complete source code of this part of the tutorial is available in
+the [official iota.js GitHub repository](https://github.com/iotaledger/iota.js/blob/feat/stardust/packages/iota/examples/shimmer-nft-transaction-tutorial/src/claim-nft.ts).
+
