@@ -54,6 +54,17 @@ module.exports = {
                         "tutorials/alias-transactions/mint-new-alias",
                         "tutorials/alias-transactions/alias-transaction",
                     ]
+                },
+                {
+                    type: "category",
+                    label: "NFT Transactions",
+                    link: {type: 'doc', id: "tutorials/nft-transactions/introduction",},
+                    items: [
+                        "tutorials/nft-transactions/prepare-the-dev-env",
+                        "tutorials/nft-transactions/mint-new-nft",
+                        "tutorials/nft-transactions/nft-transaction",
+                        "tutorials/nft-transactions/claim-nft",
+                    ]
                 }
             ]
         },
