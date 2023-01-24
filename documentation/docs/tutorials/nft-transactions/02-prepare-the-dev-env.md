@@ -1,5 +1,5 @@
 ---
-description: "Prepare a development environment to run the NFT transactions in iota.js tutorial."
+description: "Prepare a development environment to run the NFT transactions with iota.js tutorial."
 image: /img/client_banner.png
 keywords:
 
@@ -9,7 +9,7 @@ keywords:
 - proof of work
 - pow
 - shimmer
-- testnet node
+- Testnet node
 
 ---
 
@@ -25,7 +25,7 @@ To run the code in this tutorial, you will need the following:
     * [`@iota/pow-neon.js`](https://www.npmjs.com/package/@iota/pow-neon.js) to run Proof of Work (PoW). Alternatively,
       you can spin up your own node to run the PoW remotely.
 
-* Access to a Stardust Node (Hornet 2.0.0). You can use the Shimmer testnet Nodes
+* Access to a Stardust Node (Hornet 2.0.0). You can use the Shimmer Testnet Nodes
   at [https://api.testnet.shimmer.network](https://api.testnet.shimmer.network).
 * (Optional) A TypeScript compiler and related packages
 
@@ -43,7 +43,7 @@ If you plan on using the provided code example, please read the article [How To 
 
 :::warning Shimmer Addresses and Outputs
 
-The tutorial's codebase uses several predefined Shimmer addresses and outputs. If you are going to use other addresses, you will need to update the code accordingly. Likewise, the tutorial codebase assumes a particular state of the addresses and outputs. Before executing the code, please ensure your addresses and outputs are in the expected state.
+The tutorial's codebase uses several predefined Shimmer addresses and outputs. If you use other addresses, you will need to update the code accordingly. Likewise, the tutorial codebase assumes a particular state of the addresses and outputs. Before executing the code, please ensure your addresses and outputs are in the expected state.
 
 :::
 
@@ -110,7 +110,7 @@ npm install
 
 ## Troubleshooting
 
-If you are getting any errors during the installation process please make sure your system is
+If you are getting any errors during the installation process, please make sure your system is
 using [Node.js 16](https://nodejs.org/en/blog/release/v16.16.0/). You can check your node version by running the
 following command:
 
