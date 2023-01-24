@@ -4,7 +4,7 @@ image: /img/client_banner.png
 keywords:
 
 - tutorial
-- nft
+- NFT
 - token
 - asset
 - digital
@@ -17,29 +17,32 @@ keywords:
 
 # Mint a new NFT
 
-An [NFT](https://wiki.iota.org/shimmer/introduction/explanations/ledger/nft/) is a token on the ledger that is unique
-and controlled by its owner through the private key of
+An [NFT](https://wiki.iota.org/shimmer/introduction/explanations/ledger/nft/) is a unique token on the ledger. Its owner
+controls it through the private key of
 an [address](https://wiki.iota.org/iota.rs/explanations/address_key_space/). An NFT has a unique ID assigned by the
-Ledger which also yields to an address. Actually, an NFT is bound to an Output in the Ledger. An NFT has some immutable
-features that cannot be changed through the lifetime of the NFT, namely the issuer of the NFT. In addition there is
-usually also immutable metadata that links the NFT with a Digital Asset (image, video, etc.). Non-immutable aspects of
-the NFT can only be changed by the owner of the NFT by unlocking its unspent Output in a transaction, and generating a
-new Output (conserving the NFT ID). A transaction can also be used to transfer the NFT to another owner. As it happens
-with other types of Outputs, NFT Outputs must also cover its storage costs with protocol-defined tokens (`SMR`).
+Ledger, bound to an Output in the Ledger. An NFT has some immutable
+features that cannot be changed through the lifetime of the NFT, namely the issuer of the NFT. Additionally, immutable
+metadata links the NFT with a Digital Asset (image, video, etc.). The owner of the NFT can only change non-immutable
+aspects of
+the NFT by unlocking its unspent Output in a transaction and generating a
+new Output (conserving the NFT ID). The owner can also use a transaction to transfer the NFT to another owner. As with
+other types of Outputs, NFT Outputs must also cover
+their [storage costs](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/storage_deposit/) with
+protocol-defined tokens (`SMR`).
 
-In order to mint a new NFT it is needed:
+To mint an NFT, you will need the following:
 
-* A not spent [Basic Output](https://wiki.iota.org/shimmer/tips/tips/TIP-0018/#basic-output) that holds enough funds for
-  the minimal storage deposit needed for the NFT Output. In the testnet you can provision funds through the Faucet, as
-  we explained in
-  our [previous tutorial](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/request-funds-from-the-faucet/).
+* A unspent [Basic Output](https://wiki.iota.org/shimmer/tips/tips/TIP-0018/#basic-output) that holds enough funds for
+  the minimal storage deposit needed for the NFT Output. In
+  the [Testnet](https://wiki.iota.org/shimmer/introduction/reference/networks/betanet/), you
+  can [request funds from the Faucet](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/request-funds-from-the-faucet/).
 
-* The key pair corresponding to the Shimmer address that owns the former Output as you need to unlock a certain amount
-  of funds to cover the storage deposit of the Output corresponding to the new minted NFT.
+* The key pair that corresponds to the Shimmer address that owns the former Output, as you need to unlock a certain
+  amount of funds to cover the storage deposit of the Output corresponding to the newly minted NFT.
 
-* The immutable metadata that will allow you to associate the NFT with a digital asset. For instance the digital asset
-  could be stored, in a permissioned server. Upon proving ownership of the NFT, such server can grant access to the
-  associated digital asset. Remember the longer the metadata the higher storage deposit you will need.
+* The immutable metadata that will allow you to associate the NFT with a digital asset. For instance, you could store a
+  digital asset in a permissioned server. Upon proving ownership of the NFT, the server would grant access to the
+  associated digital asset. Remember the longer the metadata, the higher the storage deposit.
 
 ```typescript
 const consumedOutputId = "0xcb16...";
@@ -100,26 +103,28 @@ const amountNeeded = bigInt(nftStorageCost).multiply(bigInt(2));
 nftOutput.amount = amountNeeded.toString();
 ```
 
-You can observe that `nftId` is initialized to an hexadecimal string that represents `32` bytes set to `0`. That is the
-way to ask for a new NFT to be minted. The Output also includes two immutable features: the `Issuer` (that must be equal
-to the owner of the Input of the transaction that is going to create the NFT) and the `metadata`. The latter allows to
-know information about the asset bound to the NFT. In this case
+## Initialize the NFT
+
+The `nftId` is initialized as a hexadecimal string that represents `32` bytes set to `0`. By doing this, you tell the
+request to mint a **new** NFT. The Output also includes two immutable features:
+The `Issuer`. It must be equal to the owner of the Input of the transaction that will create the NFT
+The `metadata`. This allows knowing information about the asset bound to the NFT. In this case,
 the [IRC27 standard](https://wiki.iota.org/shimmer/tips/tips/TIP-0027/) is used to assert that the asset is an image
 hosted at a particular URI.
 
-The unlock conditions set that the `sourceAddress` is the one that owns this NFT. As you did in previous tutorials you
-need to calculate the storage costs of the NFT Output and assign it to the `amount` held by the Output. In this case the
-double of the cost is transferred so that, if needed, the NFT Output can be expanded with extra metadata or unlock
-conditions.
+### Unlock Conditions
+
+The unlock conditions set that the `sourceAddress` is the one that owns this NFT. You will need to calculate the storage
+costs of the NFT Output and assign it to the `amount` held by the Output. In this case, the code transferred double the
+actual cost so that, if needed, the NFT Output can be expanded with extra metadata or unlock conditions.
 
 ## Define the Transaction Essence
 
-The transaction defined involves an Input (the Output that holds at least enough funds to cover the storage deposit of
-the new NFT), and two Outputs. The new NFT Output and another Basic Output with the remaining funds from the original
-Input (that can only be unlocked with the original address that controls the funds).
+The transaction involves an Input (the Output that holds at least enough funds to cover the storage deposit of
+the new NFT) and two Outputs. The new NFT Output and another Basic Output with the remaining funds from the original
+Input that you can only unlock with the original address that controls the funds.
 
-For calculating the remaining funds, a query is made against the node to obtain the details of the aforementioned
-consumed Output.
+To calculate the remaining funds, you need to query the node to obtain the details of the consumed Output.
 
 ```typescript
 const inputs: IUTXOInput[] = [];
@@ -151,13 +156,13 @@ const transactionEssence: ITransactionEssence = {
 
 ## Issue the Transaction
 
-Once the transaction essence is defined the transaction can be issued the same way as we did
-in [previous tutorials](../value-transactions/transfer-funds/#create-a-transaction-payload). The essence has to be
-signed with the keys of the address that controls the initial Output unlocked and which will provide funds for your
-NFT (the storage deposit as a minimum).
+Once the transaction essence is defined you can issue the transaction the same way as
+with [value transaction](../value-transactions/transfer-funds/#create-a-transaction-payload). You will need to sign the
+essence with the keys of the address that controls the initial Output, which will provide funds for your NFT (the
+storage deposit as a minimum).
 
-After submitting the corresponding block with the Block ID you can check in
-the [Tangle Explorer](https://explorer.shimmer.network/testnet) the resulting outputs.
+After submitting the corresponding block with the Block ID, you can check the resulting outputs in
+the [Tangle Explorer](https://explorer.shimmer.network/testnet).
 
 ```typescript
 const essenceHash = TransactionHelper.getTransactionEssenceHash(transactionEssence);
@@ -191,15 +196,15 @@ console.log("Block Id:", blockId);
 
 ## Calculate the NFT ID
 
-It is important to understand that the new NFT ID is derived from the Id of the NFT Output and the Id of the NFT Output
-is derived from the Id of the transaction. The Id of the transaction is a hash of the transaction payload, that can be
-calculated using the function `computeTransactionIdFromTransactionPayload` as shown below. The Id of the Output is
-calculated using the function `TransactionHelper.outputIdFromTransactionData` and then the NFT ID is the Blake256 hash
-of such an Output Id. Afterwards you can calculate the Bech32 address corresponding to such an NFT ID using
-the `Bech32Helper` and specifying that it is an `NFT_ADDRESS_TYPE`.
+It is important to understand that the new NFT ID is derived from the ID of the NFT Output. In turn, the ID of the NFT
+Output is derived from the transaction ID. The transaction ID is a hash of the transaction payload. You can calculate it
+using the function `computeTransactionIdFromTransactionPayload` as shown below. The Output ID is
+calculated using the function `TransactionHelper.outputIdFromTransactionData`, and then the NFT ID is the Blake256 hash
+of the Output Id. Afterward, you can calculate the Bech32 address corresponding to the NFT ID using
+the [`Bech32Helper`](../../references/client/classes/Bech32Helper.md) and specifying that it is an `NFT_ADDRESS_TYPE`.
 
-In this case, before querying the block you can wait some seconds for confirmation and check through the `blockMetadata`
-function that your block was actually included by the Ledger.
+Before querying the block, you can wait some seconds for confirmation and check through the `blockMetadata`
+function that the Ledger included your block.
 
 ```typescript
 setTimeout(async () => {
@@ -229,7 +234,7 @@ function computeTransactionIdFromTransactionPayload(payload: ITransactionPayload
 }
 ```
 
-The code above will result in something similar to:
+If you run the code above, you should get an output similar to:
 
 ```text
 Block Id: 0xfd8fdb766f6e55afc52c4828cb93510530b7efcd7bdd55aadf8b8a01d6505b59
@@ -238,9 +243,10 @@ NFT ID: 0x601c1c6a67b25c453a2286f639a43f8a68aeb865bcc53632cb670e6afa2ad12a
 NFT Address: rms1zpspc8r2v7e9c3f6y2r0vwdy879x3t4cvk7v2d3jednsu6h69tgj5y8mzdm
 ```
 
-Remember that the NFT ID remains constant and known by every node software regardless the transactions (NFT Outputs
-generated) issued. That means that you can query, through the Tangle Explorer for instance, the current NFT Output of an
-NFT by just supplying the NFT ID or its representation as a Bech32 address.
+Remember that the NFT ID remains constant and known by every node regardless of the transactions (NFT Outputs
+generated) issued. That means you can query, through the [Tangle Explorer](https://explorer.shimmer.network/testnet),
+for instance, the current NFT Output of an
+NFT by supplying the NFT ID or its representation as a Bech32 address.
 
 ## Putting It All Together
 
