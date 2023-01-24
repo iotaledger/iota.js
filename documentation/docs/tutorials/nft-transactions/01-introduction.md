@@ -39,4 +39,6 @@ Outputs turn into Inputs and generate new Outputs, typically another NFT Output 
 
 ## Storage Costs and Deposits
 
-You need to take into account that NFT Output as any other UTXOs need to be stored by [Hornet Nodes](https://wiki.iota.org/shimmer/hornet/welcome), so there is a [storage cost](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/introduction/#storage-costs-and-deposits).
+You need to take into account that NFT Output, as any other UTXOs, need to be stored by [Hornet Nodes](https://wiki.iota.org/shimmer/hornet/welcome), so there is a [storage cost](https://wiki.iota.org/shimmer/iotajs/tutorials/value-transactions/introduction/#storage-costs-and-deposits).
+
+
