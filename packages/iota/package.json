@@ -19,7 +19,7 @@
         "@iota/crypto.js": "2.0.0-rc.1",
         "@iota/util.js": "2.0.0-rc.1",
         "big-integer": "^1.6.51",
-        "node-fetch": "2.6.7"
+        "node-fetch": "3.3.0"
     },
     "scripts": {
         "build-clean": "rimraf ./es/* ./typings/*",
