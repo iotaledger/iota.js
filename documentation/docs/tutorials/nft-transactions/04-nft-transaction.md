@@ -47,7 +47,7 @@ const nftBuyerAddr = "0x57d3...";
 
 ## Query For the NFT Output
 
-You will first need to re the NFT Output of your NFT. The easiest way to do so is through a query to
+You will first need to query for the NFT Output of your NFT. The easiest way to do so is through a query to
 the [indexation plugin](https://wiki.iota.org/shimmer/inx-indexer/welcome/) by NFT ID. You need to obtain the full
 Output details as you need to use them as input for the transaction.
 
