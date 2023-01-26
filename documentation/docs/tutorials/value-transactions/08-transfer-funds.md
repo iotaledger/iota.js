@@ -173,10 +173,10 @@ const essenceFinal = wsTsxEssence.finalBytes();
 const essenceHash = Blake2b.sum256(essenceFinal);
 ```
 
-#### Sign the transaction essence
+#### Sign the Transaction Essence
 
 Once you have calculated the hash of the transaction essence, you can create the final transaction payload by adding the
-corresponding signature unlock:
+corresponding signature that unlocks your Input:
 
 ```typescript
 const privateKey = Converter.hexToBytes(sourceAddressPrivateKey);
