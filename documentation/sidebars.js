@@ -48,12 +48,15 @@ module.exports = {
                 {
                     type: "category",
                     label: "Alias Transactions",
-                    link: { type: "doc", id: "tutorials/alias-transactions/introduction" },
+                    link: {type: "doc", id: "tutorials/alias-transactions/introduction"},
                     items: [
                         "tutorials/alias-transactions/prepare-the-dev-env",
                         "tutorials/alias-transactions/mint-new-alias",
                         "tutorials/alias-transactions/alias-transaction"
                     ],
+                },
+                {
+                    type: "category",
                     label: "Native Token Transactions",
                     link: { type: "doc", id: "tutorials/native-token-transactions/introduction" },
                     items: [

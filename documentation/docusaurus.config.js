@@ -28,7 +28,37 @@ module.exports = {
             {
                 title: 'Stardust for iota.js: Value Transactions',
                 description:'Get acquainted with the structure and functionality of transactions in IOTA\'s Stardust protocol in the Shimmer network using iota.js primitives to issue value transactions.',
-                preview: 'setup_iota-js_for_development.png',
+                preview: '/img/tutorials/bg-value-transactions.png',
+                route: '/shimmer/iotajs/tutorials/value-transactions/introduction',
+                tags: ['text', 'getting-started', 'client', 'shimmer', 'js'],
+            },
+        ],
+        [
+            '@iota-wiki/plugin-tutorial',
+            {
+                title: 'Stardust for iota.js: Alias Transactions',
+                description:'Learn how to create a new Alias Transaction and update the Alias\'s state with iota.js.',
+                preview: '/img/tutorials/bg-alias-transactions.png',
+                route: '/shimmer/iotajs/tutorials/value-transactions/introduction',
+                tags: ['text', 'getting-started', 'client', 'shimmer', 'js'],
+            },
+        ],
+        [
+            '@iota-wiki/plugin-tutorial',
+            {
+                title: 'Stardust for iota.js: Native Tokens',
+                description:'Learn how to mint, send and melt Native tokens with iota.js.',
+                preview: '/img/tutorials/bg-native-tokens.png',
+                route: '/shimmer/iotajs/tutorials/value-transactions/introduction',
+                tags: ['text', 'getting-started', 'client', 'shimmer', 'js'],
+            },
+        ],
+        [
+            '@iota-wiki/plugin-tutorial',
+            {
+                title: 'Stardust for iota.js: NFTs and Unlock Conditions',
+                description:'Learn how to mint, send and claim NFTs using custom unlock conditions with iota.js.',
+                preview: '/img/tutorials/bg-nfts.png',
                 route: '/shimmer/iotajs/tutorials/value-transactions/introduction',
                 tags: ['text', 'getting-started', 'client', 'shimmer', 'js'],
             },
