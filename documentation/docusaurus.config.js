@@ -9,7 +9,7 @@ module.exports = {
                 path: path.resolve(__dirname, 'docs'),
                 routeBasePath: 'iotajs', // Usually your repository's name, in this case iotajs
                 sidebarPath: path.resolve(__dirname, 'sidebars.js'),
-                editUrl: 'https://github.com/iotaledger/iota.js/tree/dev/packages/iota/documentation',// Example: https://github.com/iotacommunity/iota.js/edit/production/documentation
+                editUrl: 'https://github.com/iotaledger/iota.js/tree/feat/stardust/documentation',// Example: https://github.com/iotacommunity/iota.js/edit/production/documentation
                 remarkPlugins: [require('remark-code-import'), require('remark-import-partial')],// You can add any remark or rehype extensions you may need here
             },
         ],
