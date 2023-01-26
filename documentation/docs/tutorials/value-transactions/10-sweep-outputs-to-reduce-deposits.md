@@ -97,7 +97,7 @@ const transactionEssence: ITransactionEssence = {
 };
 ```
 
-Now, you need to unlock each Input by calculating a signature. To generate it you will need the public and private keys of your address and the hash of the transaction essence.
+Now, you need to unlock each Input by calculating a signature. To perform this calculation you will need the public and private keys of your address and the hash of the transaction essence.
 
 In this particular case, the unlock signature will be the same for each Input, so the examples use a "Reference unlock type", [`REFERENCE_UNLOCK_TYPE`](../../references/client/api_ref#reference_unlock_type).
 
