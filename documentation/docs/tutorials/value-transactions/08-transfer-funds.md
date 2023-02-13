@@ -160,7 +160,7 @@ const inputsCommitment = TransactionHelper.getInputsCommitment([outputDetails.ou
 
 const transactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs
@@ -173,10 +173,10 @@ const essenceFinal = wsTsxEssence.finalBytes();
 const essenceHash = Blake2b.sum256(essenceFinal);
 ```
 
-#### Sign the transaction essence
+#### Sign the Transaction Essence
 
 Once you have calculated the hash of the transaction essence, you can create the final transaction payload by adding the
-corresponding signature unlock:
+corresponding signature that unlocks your Input:
 
 ```typescript
 const privateKey = Converter.hexToBytes(sourceAddressPrivateKey);
@@ -336,7 +336,7 @@ const inputsCommitment = TransactionHelper.getInputsCommitment([outputDetails.ou
 
 const transactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs

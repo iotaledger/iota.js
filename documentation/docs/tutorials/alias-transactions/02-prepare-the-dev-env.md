@@ -84,7 +84,7 @@ You can create your `package.json` file from the example below and place it in y
   },
   "dependencies": {
     "@iota/crypto.js": "2.0.0-rc.1",
-    "@iota/iota.js": "2.0.0-rc.1",
+    "@iota/iota.js": "2.0.0-rc.2",
     "@iota/util.js": "2.0.0-rc.1",
     "@iota/pow-neon.js": "2.0.0-rc.2"
   },

@@ -86,7 +86,7 @@ The `aliasId` is initialized as a hexadecimal string that represents `32` bytes 
 
 The transaction you are defining involves an input (the output that holds enough funds to cover the storage deposit of the new Alias) and two outputs:
 The new Alias Output
-A Basic Output that holds the remaining funds from the original input. You can only unlock this output with the original address that controls the funds.
+A Basic Output that holds the remaining funds from the original Input. You can only unlock this Output with the original address that controls the funds.
 
 In this case, you manually assign an amount to send to the Alias Output (`60000 Glow`) so that it covers its storage deposit. In a real-world scenario, you may need to automatically calculate the storage deposit as per the byte rent costs published by your node.
 
@@ -131,7 +131,7 @@ const inputsCommitment = TransactionHelper.getInputsCommitment([consumedOutputDe
 // Create transaction essence
 const transactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs

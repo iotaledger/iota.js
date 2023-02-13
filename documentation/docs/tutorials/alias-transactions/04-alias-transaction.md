@@ -60,7 +60,7 @@ nextAliasOutput.aliasId = aliasId;
 
 ## Define the Transaction
 
-The transaction takes the original Alias Output as input and generates a new Alias Output with the new state but keeps the original Alias ID.
+The transaction takes the original Alias Output as Input and generates a new Alias Output with the new state but keeps the original Alias ID.
 
 ```typescript
 const inputs: IUTXOInput[] = [];
@@ -73,16 +73,16 @@ const inputsCommitment = TransactionHelper.getInputsCommitment([initialAliasOutp
 
 const transactionEssence: ITransactionEssence = {
     type: TRANSACTION_ESSENCE_TYPE,
-    networkId: protocolInfo.networkId,
+    networkId: TransactionHelper.networkIdFromNetworkName(protocolInfo.networkName),
     inputs,
     inputsCommitment,
     outputs
 };
 ```
 
-## Provide the Unlock Conditions
+## Unlock your Input
 
-The unlock conditions you need to provide correspond to the State Controller signature calculated against the transaction essence.
+To unlock your Input you need to provide the signature of the State Controller calculated against the transaction essence.
 
 ```typescript
 const wsTsxEssence = new WriteStream();
