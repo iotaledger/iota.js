@@ -58,7 +58,6 @@
         "typescript": "^4.6.2"
     },
     "main": "dist/pow-browser.js",
-    "module": "es/pow-browser.js",
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
