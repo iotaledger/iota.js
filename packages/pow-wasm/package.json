@@ -58,7 +58,6 @@
         "typescript": "^4.8.3"
     },
     "main": "dist/pow-wasm.js",
-    "module": "es/pow-wasm.js",
     "typings": "typings/index.d.ts",
     "files": [
         "dist",
