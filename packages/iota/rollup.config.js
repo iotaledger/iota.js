@@ -4,9 +4,7 @@ import { terser } from "rollup-plugin-terser";
 
 const plugins = [
     commonjs(),
-    resolve({
-        browser: process.env.BROWSER
-    })
+    resolve()
 ];
 
 if (process.env.MINIFY) {
@@ -14,9 +12,9 @@ if (process.env.MINIFY) {
 }
 
 export default {
-    input: `./es/index${process.env.BROWSER ? "-browser" : "-node"}.js`,
+    input: `./es/index.js`,
     output: {
-        file: `dist/cjs/index${process.env.BROWSER ? "-browser" : "-node"}${process.env.MINIFY ? ".min" : ""}.js`,
+        file: `dist/cjs/index${process.env.MINIFY ? ".min" : ""}.js`,
         format: "umd",
         name: "Iota",
         compact: process.env.MINIFY,
@@ -28,8 +26,6 @@ export default {
             "@iota/crypto.js": "IotaCrypto"
         }
     },
-    external: process.env.BROWSER
-        ? ["big-integer", "@iota/util.js", "@iota/crypto.js"]
-        : ["big-integer", "crypto", "node-fetch", "@iota/util.js", "@iota/crypto.js"],
+    external: ["big-integer", "crypto", "node-fetch", "@iota/util.js", "@iota/crypto.js"],
     plugins
 };
