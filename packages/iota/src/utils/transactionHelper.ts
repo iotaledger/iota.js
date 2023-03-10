@@ -70,9 +70,9 @@ export class TransactionHelper {
      * @returns The transaction id.
      */
     public static transactionIdFromTransactionPayload(transactionPayload: ITransactionPayload): string {
-        const tpWriteStream = new WriteStream();
-        serializeTransactionPayload(tpWriteStream, transactionPayload);
-        return Converter.bytesToHex(Blake2b.sum256(tpWriteStream.finalBytes()), true);
+        const hash = this.getTransactionPayloadHash(transactionPayload);
+
+        return Converter.bytesToHex(hash, true);
     }
 
     /**
