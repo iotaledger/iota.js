@@ -41,8 +41,8 @@ you [generated the public address](05-public-addresses.md):
 
 ```json
 {
-  "networkName": "testnet",
-  "networkId": "8342982141227064571",
+  "networkName": "testnet-1",
+  "networkId": "1856588631910923207",
   "bech32Hrp": "rms",
   "minPowScore": 1500
 }
