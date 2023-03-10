@@ -65,11 +65,11 @@ export class TransactionHelper {
     }
 
     /**
-     * Computes the transaction Id from transaction payload.
+     * Returns the transactionId from transaction payload.
      * @param transactionPayload The transaction payload.
-     * @returns The transaction Id.
+     * @returns The transaction id.
      */
-    public static calculateTransactionId(transactionPayload: ITransactionPayload): string {
+    public static transactionIdFromTransactionPayload(transactionPayload: ITransactionPayload): string {
         const tpWriteStream = new WriteStream();
         serializeTransactionPayload(tpWriteStream, transactionPayload);
         return Converter.bytesToHex(Blake2b.sum256(tpWriteStream.finalBytes()), true);
