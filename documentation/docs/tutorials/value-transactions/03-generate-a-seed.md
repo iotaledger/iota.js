@@ -24,7 +24,7 @@ and, from that point on, use a hierarchical deterministic method to derive multi
 The seed phrase is generated in accordance with
 the [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) specification and is composed of a set of
 words represented as a whitespace-separated string. You can generate a random mnemonic seed phrase using the
-[`Bip39.randomMnemonic()`](../../references/crypto/classes/Bip39#randommnemonic) function as shown in the code snippet
+[`Bip39.randomMnemonic()`](../../references/crypto/classes/Bip39.md#randommnemonic) function as shown in the code snippet
 below:
 
 ```typescript
@@ -38,7 +38,7 @@ console.log("Seed phrase:", randomMnemonic);
 
 Once you have the seed phrase, also known as BIP39 random mnemonic, the next step is to obtain an *Ed25519 master seed*
 from the seed phrase. You can use the
-[`Ed25519Seed.fromMnemonic(randomMnemonic)`](../../references/client/classes/Ed25519Seed#frommnemonic) function as shown
+[`Ed25519Seed.fromMnemonic(randomMnemonic)`](../../references/client/classes/Ed25519Seed.md#frommnemonic) function as shown
 in the following snippet:
 
 ```typescript

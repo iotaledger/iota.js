@@ -19,11 +19,11 @@ Provided the proof size in bytes does not change between state changes, a new Al
 
 To mint a new Alias and generate its genesis, you will need the following:
 
-* An unspent Output that holds enough funds for the minimal storage deposit needed for the genesis Alias Output. In the Testnet, you can [request funds through the Faucet](../value-transactions/request-funds-from-the-faucet/).
+* An unspent Output that holds enough funds for the minimal storage deposit needed for the genesis Alias Output. In the Testnet, you can [request funds through the Faucet](../value-transactions/06-request-funds-from-the-faucet.md).
 
 * The key pair that corresponds to the Shimmer address that owns the output, as you need to unlock a certain amount of funds to cover the storage deposit of the new minted Alias.
 
-* A State Controller Address. You will use the State Controller address private key to unlock the Alias Output of your new Alias so that it can transition to a new state when needed. If you haven’t generated any addresses before, you can find detailed instructions in the [Send Value Transactions tutorial](../value-transactions/generate-addresses).
+* A State Controller Address. You will use the State Controller address private key to unlock the Alias Output of your new Alias so that it can transition to a new state when needed. If you haven’t generated any addresses before, you can find detailed instructions in the [Send Value Transactions tutorial](../value-transactions/04-generate-addresses.md).
 
 * A Governor Address. With the private key of the Governor, you will be able to change the State Controller Address or even destroy the Alias.
 
@@ -140,7 +140,7 @@ const transactionEssence: ITransactionEssence = {
 
 ## Issue the Transaction
 
-Once you have defined the transaction essence, you can [issue the transaction](../value-transactions/transfer-funds/#create-a-transaction-payload). You will need to sign the essence with the keys of the address that controls the initial output that will provide funds for the Alias output (the storage deposit as a minimum).
+Once you have defined the transaction essence, you can [issue the transaction](../value-transactions/08-transfer-funds.md#create-a-transaction-payload). You will need to sign the essence with the keys of the address that controls the initial output that will provide funds for the Alias output (the storage deposit as a minimum).
 
 After submitting the block with the Block ID, you can check the [Tangle Explorer](https://explorer.shimmer.network/testnet) for the resulting outputs.
 
@@ -179,7 +179,7 @@ console.log("Block Id:", blockId);
 
 ## Calculate the Alias ID
 
-It is important to understand that the new Alias ID is derived from the ID of the Alias Output, and the ID of the Alias Output is derived from the ID of the transaction. The transaction ID is a hash of the transaction payload, which can be calculated using the function `computeTransactionIdFromTransactionPayload` as shown below. The output ID is calculated using the function [`TransactionHelper.outputIdFromTransactionData`](../../references/client/classes/TransactionHelper#outputidfromtransactiondata), and the Alias Id is the Blake256 hash of an Output Id. You can calculate the Bech32 address corresponding to the Alias Id using the [`Bech32Helper`](../../references/client/classes/Bech32Helper) and specifying that it is an `ALIAS_ADDRESS_TYPE`.
+It is important to understand that the new Alias ID is derived from the ID of the Alias Output, and the ID of the Alias Output is derived from the ID of the transaction. The transaction ID is a hash of the transaction payload, which can be calculated using the function `computeTransactionIdFromTransactionPayload` as shown below. The output ID is calculated using the function [`TransactionHelper.outputIdFromTransactionData`](../../references/client/classes/TransactionHelper.md#outputidfromtransactiondata), and the Alias Id is the Blake256 hash of an Output Id. You can calculate the Bech32 address corresponding to the Alias Id using the [`Bech32Helper`](../../references/client/classes/Bech32Helper.md) and specifying that it is an `ALIAS_ADDRESS_TYPE`.
 
 ```typescript
 const blockData: IBlock = await client.block(blockId);

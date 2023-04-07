@@ -157,7 +157,7 @@ const transactionEssence: ITransactionEssence = {
 ## Issue the Transaction
 
 Once the transaction essence is defined you can issue the transaction the same way as
-with [value transaction](../value-transactions/transfer-funds/#create-a-transaction-payload). You will need to sign the
+with [value transaction](../value-transactions/08-transfer-funds.md#create-a-transaction-payload). You will need to sign the
 essence with the keys of the address that controls the initial Output, which will provide funds for your NFT (the
 storage deposit as a minimum).
 

@@ -36,7 +36,7 @@ Before you can create a transaction, you will need to:
 
 #### Create a wallet seed
 
-You can create a wallet seed by instantiating an [Ed25519Seed](../references/client/classes/Ed25519Seed) using its constructor.
+You can create a wallet seed by instantiating an [Ed25519Seed](../references/client/classes/Ed25519Seed.md) using its constructor.
 You will need to provide `secretBytes` to the constructor, which you can get by using the [Converter.hexToBytes(hex)](../references/util/classes/Converter.md#hextobytes) function.
 
 #### Retrieve the wallet's address
@@ -53,7 +53,7 @@ you can use the '/enqueue' endpoint.
 
 ## Send the Transaction
 
-Once you have fulfilled the [pre-requirements](#pre-requirements), you can send the transaction using either the [sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, taggedData?)](../references/client/api_ref#sendadvanced) function, which will return the created block's id, or the [send(client, seed, accountIndex, addressBech32, amount, taggedData?, addressOptions?)](../references/client/api_ref.md#send) function, which will return the created block's id, as well as the constructed blocks.
+Once you have fulfilled the [pre-requirements](#pre-requirements), you can send the transaction using either the [sendAdvanced(client, inputsAndSignatureKeyPairs, outputs, taggedData?)](../references/client/api_ref.md#sendadvanced) function, which will return the created block's id, or the [send(client, seed, accountIndex, addressBech32, amount, taggedData?, addressOptions?)](../references/client/api_ref.md#send) function, which will return the created block's id, as well as the constructed blocks.
 
 As this example uses a genesis address, it must use the `(client, inputsAndSignatureKeyPairs, outputs, taggedData?)` function.  However, if you are doing a wallet to wallet transfer, you can use the `send(client, seed, accountIndex, addressBech32, amount, taggedData?, addressOptions?)` method.
 

@@ -32,12 +32,12 @@ its [constructor](../references/client/classes/Ed25519Seed.md#constructor).
 
 #### From Mnemonic
 
-You can also generate a seed from a mnemonic by using the [Ed25519Seed.fromMnemonic(mnemonic)](../references/client/classes/Ed25519Seed#frommnemonic)
+You can also generate a seed from a mnemonic by using the [Ed25519Seed.fromMnemonic(mnemonic)](../references/client/classes/Ed25519Seed.md#frommnemonic)
 function.
 
 ##### Generate a Random Mnemonic
 
-You can generate a random mnemonic using the [Bip39.randomMnemonic(length?)](../references/crypto/classes/Bip39#randommnemonic) function.
+You can generate a random mnemonic using the [Bip39.randomMnemonic(length?)](../references/crypto/classes/Bip39.md#randommnemonic) function.
 
 ## Create an Address
 
@@ -45,7 +45,7 @@ You can generate a random mnemonic using the [Bip39.randomMnemonic(length?)](../
 
 #### generateBip44Address()
 
-You can generate a new Bip44 address using the [generateBip44Address(generatorState	)](../references/client/api_ref#generatebip44address) function. You will need to provide an [IBip44GeneratorState](../references/client/interfaces/IBip44GeneratorState) as `generatorState`.
+You can generate a new Bip44 address using the [generateBip44Address(generatorState	)](../references/client/api_ref.md#generatebip44address) function. You will need to provide an [IBip44GeneratorState](../references/client/interfaces/IBip44GeneratorState.md) as `generatorState`.
 
 ### Ed25519 Address
 
@@ -54,7 +54,7 @@ You can create a new [Ed25519Address](../references/client/classes/Ed25519Addres
 
 ### Retrieve an Address
 
-You can retrieve an address by using the [Ed25519Address.toAddress()](../references/client/classes/Ed25519Address#toaddress)
+You can retrieve an address by using the [Ed25519Address.toAddress()](../references/client/classes/Ed25519Address.md#toaddress)
 function.
 
 You can then use the [Converter.bytesToHex(array, includePrefix?, startIndex?, length?, reverse?)](../references/util/classes/Converter.md#bytestohex) and  [Bech32Helper.toBech32()](../references/client/classes/Bech32Helper.md#tobech32) functions to convert the address

@@ -60,7 +60,7 @@ The Ed25519 format has a length of `64` hex chars (32 bytes) as the Ed25519 publ
 address starts with `rms` or `smr` and continues with a `1` character.
 
 You can now transform the BECH32 address into an Ed25519 address using
-the [`Bech32Helper.fromBech32()`](../../references/client/classes/Bech32Helper#frombech32) function, as shown in the
+the [`Bech32Helper.fromBech32()`](../../references/client/classes/Bech32Helper.md#frombech32) function, as shown in the
 following snippet:
 
 ```typescript

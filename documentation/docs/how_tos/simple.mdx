@@ -30,7 +30,7 @@ You can instantiate a [SimpleNodeClient](../references/client/classes/SingleNode
 ### Get the SimpleNodeClient's Properties
 
 Once you have [instantiated the SingleNodeClient](#instantiate-a-simplenodeclient), you can retrieve its properties by
-using the class's [functions](../references/client/classes/SingleNodeClient#methods-1).  The example uses the following:
+using the class's [functions](../references/client/classes/SingleNodeClient.md#methods-1).  The example uses the following:
 
 * [SingleNodeClient.health()](../references/client/classes/SingleNodeClient.md#health)
 * [SingleNodeClient.info()](../references/client/classes/SingleNodeClient.md#info)
@@ -39,34 +39,34 @@ using the class's [functions](../references/client/classes/SingleNodeClient#meth
 ## Submit a Block
 
 Once you have [instantiated the SingleNodeClient](#instantiate-a-simplenodeclient), you can create and submit a new
-block using the [SingleNodeClient.nodeSubmit()](../references/client/classes/SingleNodeClient#blocksubmit) function. To
-do so, you will first need to create a [submitBlock](../references/client/classes/SingleNodeClient#blocksubmit) as shown
+block using the [SingleNodeClient.nodeSubmit()](../references/client/classes/SingleNodeClient.md#blocksubmit) function. To
+do so, you will first need to create a [submitBlock](../references/client/classes/SingleNodeClient.md#blocksubmit) as shown
 in the example.
 
 ## Retrieve a Block
 
-You can use the [SingleNodeClient.block(blockId)](../references/client/classes/SingleNodeClient#block) function to retrieve
+You can use the [SingleNodeClient.block(blockId)](../references/client/classes/SingleNodeClient.md#block) function to retrieve
 a block using its `blockId`.  If successful, the function will return a
 [block](../references/client/interfaces/IClient.md).
 
 ## Retrieve a Block's Metadata
 
-You can use the [SingleNodeClient.blockMetadata(blockId)](../references/client/classes/SingleNodeClient#blockmetadata) function to retrieve
+You can use the [SingleNodeClient.blockMetadata(blockId)](../references/client/classes/SingleNodeClient.md#blockmetadata) function to retrieve
 a block's metadata using its `blockId`.  If successful, the function will return a
-[IBlockMetadata](../references/client/interfaces/IBlockMetadata).
+[IBlockMetadata](../references/client/interfaces/IBlockMetadata.md).
 
 ## Retrieve a Raw Block
 
-You can use the [SingleNodeClient.blockRaw(blockId)](../references/client/classes/SingleNodeClient#blockraw) function to retrieve
+You can use the [SingleNodeClient.blockRaw(blockId)](../references/client/classes/SingleNodeClient.md#blockraw) function to retrieve
 a raw block using its `blockId`.  If successful, the function will return the block's raw data which you can convert to
-Hex using the [Converter.bytesToHex()](../references/util/classes/Converter#bytestohex) function, or decode using the
-[ReadStream(blockRaw)](../references/util/classes/ReadStream) class.
+Hex using the [Converter.bytesToHex()](../references/util/classes/Converter.md#bytestohex) function, or decode using the
+[ReadStream(blockRaw)](../references/util/classes/ReadStream.md) class.
 
 ## Retrieve a Milestone
 
 You can retrieve a milestone using the
-[SingleNodeClient.milestoneByIndex(index)](../references/client/classes/SingleNodeClient#milestonebyindex) function. The
-function will return a [IMilestonePayload](../references/client/interfaces/IMilestonePayload) if successful.
+[SingleNodeClient.milestoneByIndex(index)](../references/client/classes/SingleNodeClient.md#milestonebyindex) function. The
+function will return a [IMilestonePayload](../references/client/interfaces/IMilestonePayload.md) if successful.
 
 ### Retrieve a Milestone's Properties
 
@@ -76,8 +76,8 @@ Once you have [retrieved a milestone](#retrieve-a-milestone), you can retrieve a
 ## Retrieve an Output
 
 You can retrieve an output using the
-[SingleNodeClient.output(outputId)](../references/client/classes/SingleNodeClient#output) function. The
-function will return a [IMilestonePayload](../references/client/interfaces/IOutputResponse) if successful.
+[SingleNodeClient.output(outputId)](../references/client/classes/SingleNodeClient.md#output) function. The
+function will return a [IMilestonePayload](../references/client/interfaces/IOutputResponse.md) if successful.
 
 
 ### Retrieve an Output's Properties
