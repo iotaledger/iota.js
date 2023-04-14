@@ -67,16 +67,16 @@ export class Bech32 {
      */
     public static decode(bech: string):
         | {
-              humanReadablePart: string;
-              data: Uint8Array;
-          }
+            humanReadablePart: string;
+            data: Uint8Array;
+        }
         | undefined {
         const result = Bech32.decodeTo5BitArray(bech);
         return result
             ? {
-                  humanReadablePart: result.humanReadablePart,
-                  data: Bech32.from5Bit(result.data)
-              }
+                humanReadablePart: result.humanReadablePart,
+                data: Bech32.from5Bit(result.data)
+            }
             : undefined;
     }
 
@@ -85,12 +85,8 @@ export class Bech32 {
      * @param bech The text to decode.
      * @returns The decoded data or undefined if it could not be decoded.
      */
-    public static decodeTo5BitArray(bech: string):
-        | {
-              humanReadablePart: string;
-              data: Uint8Array;
-          }
-        | undefined {
+    public static decodeTo5BitArray(bech: string): { humanReadablePart: string; data: Uint8Array } |
+        undefined {
         bech = bech.toLowerCase();
 
         const separatorPos = bech.lastIndexOf(Bech32.SEPARATOR);
@@ -120,7 +116,7 @@ export class Bech32 {
         const humanReadablePart = bech.slice(0, separatorPos);
 
         if (!Bech32.verifyChecksum(humanReadablePart, data)) {
-            return;
+            return undefined;
         }
 
         return { humanReadablePart, data: data.slice(0, -6) };

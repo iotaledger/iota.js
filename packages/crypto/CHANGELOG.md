@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0-rc.2
+
+@iota/util bump to 2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 * Stardust release candidate
