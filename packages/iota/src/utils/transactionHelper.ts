@@ -20,7 +20,7 @@ import type { ITransactionPayload } from "../models/payloads/ITransactionPayload
 /**
  * Helper methods for Transactions.
  */
- export class TransactionHelper {
+export class TransactionHelper {
     /**
      * The confirmed milestone index length.
      */
@@ -50,7 +50,7 @@ import type { ITransactionPayload } from "../models/payloads/ITransactionPayload
     }
 
     /**
-     * Returns the outputId from transation id and output index.
+     * Returns the outputId from transaction id and output index.
      * @param transactionId The id of the transaction.
      * @param outputIndex The index of the output.
      * @returns The output id.
@@ -62,6 +62,17 @@ import type { ITransactionPayload } from "../models/payloads/ITransactionPayload
         const outputIdBytes = writeStream.finalBytes();
 
         return Converter.bytesToHex(outputIdBytes, true);
+    }
+
+    /**
+     * Returns the transactionId from transaction payload.
+     * @param transactionPayload The transaction payload.
+     * @returns The transaction id.
+     */
+    public static transactionIdFromTransactionPayload(transactionPayload: ITransactionPayload): string {
+        const hash = this.getTransactionPayloadHash(transactionPayload);
+
+        return Converter.bytesToHex(hash, true);
     }
 
     /**
@@ -132,8 +143,8 @@ import type { ITransactionPayload } from "../models/payloads/ITransactionPayload
         const outputBytes = writeStream.finalBytes();
 
         const offset = (rentStructure.vByteFactorKey * TransactionHelper.OUTPUT_ID_LENGTH) +
-                    (rentStructure.vByteFactorData *
-                    (BLOCK_ID_LENGTH +
+            (rentStructure.vByteFactorData *
+                (BLOCK_ID_LENGTH +
                     TransactionHelper.CONFIRMED_MILESTONE_INDEX_LENGTH +
                     TransactionHelper.CONFIRMED_UINIX_TIMESTAMP_LENGTH));
         const vByteSize = (rentStructure.vByteFactorData * outputBytes.length) + offset;
