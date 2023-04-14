@@ -41,7 +41,7 @@ manipulating other outputs.
 ## Storage Costs and Deposits
 
 UTXOs need to be stored by [Hornet Nodes](https://wiki.iota.org/shimmer/hornet/welcome), so there is a storage cost.
-The Stardust protocol defines a parameter, named ["vByte cost"](../../references/client/interfaces/IRent#vbytecost),
+The Stardust protocol defines a parameter, named ["vByte cost"](../../references/client/interfaces/IRent.md#vbytecost),
 that establishes the cost of storage of each "virtual byte" in *Glow* (one Glow corresponds to 0.000001 Shimmer).
 As each output consumes a number of vBytes in the Ledger, it is a necessary condition for an output
 to cover the vByte cost with its value in the Ledger. This means that Nodes will reject transactions

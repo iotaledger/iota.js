@@ -22,7 +22,7 @@ the [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
 method and structured as per the [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) logical
 hierarchy.
 
-The `iota.js` library provides a method [`generateBip44Address`](../../references/client/api_ref#generatebip44address)
+The `iota.js` library provides a method [`generateBip44Address`](../../references/client/api_ref.md#generatebip44address)
 that creates these BIP32 paths using a state object that is updated on each call, as shown in the following snippet:
 
 ```typescript
@@ -91,10 +91,10 @@ for (const path of paths) {
 
 As the keys are generated as byte arrays (`UInt8Array`) it is necessary to encode them using displayable characters. In
 this case, hexadecimal characters using
-the [`Converter.bytesToHex()`](../../references/util/classes/Converter#bytestohex)
+the [`Converter.bytesToHex()`](../../references/util/classes/Converter.md#bytestohex)
 function. The trailing `true` parameter indicates that the `0x` prefix will be included in the representation.
 You can revert the result to bytes (`UInt8Array`)  using
-the [`Converter.hexToBytes()`](../../references/util/classes/Converter#hextobytes)
+the [`Converter.hexToBytes()`](../../references/util/classes/Converter.md#hextobytes)
 
 The generated key pairs should look like the following:
 

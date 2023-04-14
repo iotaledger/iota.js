@@ -15,7 +15,7 @@
     "remark-import-partial": "^0.0.2"
   },
   "devDependencies": {
-    "@iota-community/iota-wiki-cli": "iota-community/iota-wiki-cli#v2"
+    "@iota-wiki/cli": "latest"
   },
   "packageManager": "yarn@3.2.0"
 }

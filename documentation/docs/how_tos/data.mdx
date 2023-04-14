@@ -32,19 +32,19 @@ Before you can send data, you will need to:
 You can convert data to bytes by using the following functions from the [Converter](../references/util/classes/Converter.md)
 class:
 
-* [Converter.utf8ToBytes(utf8)](../references/util/classes/Converter#utf8tobytes).
-* [Converter.utf8ToBytes(binary)](../references/util/classes/Converter#binarytobytes).
-* [Converter.base64ToBytes(base64)](../references/util/classes/Converter#base64tobytes).
+* [Converter.utf8ToBytes(utf8)](../references/util/classes/Converter.md#utf8tobytes).
+* [Converter.utf8ToBytes(binary)](../references/util/classes/Converter.md#binarytobytes).
+* [Converter.base64ToBytes(base64)](../references/util/classes/Converter.md#base64tobytes).
 
 ## Send Data
 
-You can use the [sendData(client, tag?, data?)](../references/client/api_ref#senddata) function to send data to a
+You can use the [sendData(client, tag?, data?)](../references/client/api_ref.md#senddata) function to send data to a
 [SingleNodeClient](../references/client/classes/SingleNodeClient.md). You will need to provide a `SingleNodeClient`,
 and optionally a `tag` and `data` as bytes.
 
 ## Retrieve Data
 
-You can use the [retrieveData(client, blockId)](../references/client/api_ref#retrievedata) function to retrieve data
+You can use the [retrieveData(client, blockId)](../references/client/api_ref.md#retrievedata) function to retrieve data
 from a [SingleNodeClient](../references/client/classes/SingleNodeClient.md).  You will need to provide a
 `SingleNodeClient` and a `blockId`. If successful, the function will return an object with the block's data.
 

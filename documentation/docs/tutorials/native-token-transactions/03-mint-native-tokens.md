@@ -18,7 +18,7 @@ keywords:
 
 To mint a new native token you will need the following:
 
-* An initial *unspent Output* with enough funds to cover the [storage costs](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/storage_deposit/) of the different Outputs involved. In the Testnet, you can [request funds through the Faucet](../value-transactions/request-funds-from-the-faucet/).
+* An initial *unspent Output* with enough funds to cover the [storage costs](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/storage_deposit/) of the different Outputs involved. In the Testnet, you can [request funds through the Faucet](../value-transactions/06-request-funds-from-the-faucet.md).
 
 :::info Storage Deposits
 
@@ -178,7 +178,7 @@ const tokenFundsOutput: IBasicOutput = {
 
 ## Calculate and Set the Storage Deposits
 
-Next, you should calculate the storage deposit that will be needed for each Output. A helper function provided by `iota.js` will allow you to determine the exact number of protocol-defined tokens needed for each Output. This helper function needs the protocol parameters to be exposed by the Node, using the [`client.info()` function](../../references/client/interfaces/IClient/#info).
+Next, you should calculate the storage deposit that will be needed for each Output. A helper function provided by `iota.js` will allow you to determine the exact number of protocol-defined tokens needed for each Output. This helper function needs the protocol parameters to be exposed by the Node, using the [`client.info()` function](../../references/client/interfaces/IClient.md#info).
 
 The next Alias Output of the Alias Address will hold fewer funds than the original, as those funds will be used to cover the storage deposits of the Foundry Output and the Basic Output that will hold the minted native token funds.
 

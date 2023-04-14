@@ -20,7 +20,7 @@ If you know an `output Id`, you can query the details of using the Node API thro
 ## Connect to a Node
 
 The first thing you will need to do is to connect to a node by instantiating a `client` using
-the [`SingleNodeClient()`](../../references/client/classes/SingleNodeClient)
+the [`SingleNodeClient()`](../../references/client/classes/SingleNodeClient.md)
 class.
 
 ```typescript
@@ -31,11 +31,11 @@ const protocolInfo = await client.protocolInfo();
 console.log(protocolInfo);
 ```
 
-The code above uses the [`NeonPowProvider`](../../references/pow-neon/classes/NeonPowProvider) to calculate the PoW when
+The code above uses the [`NeonPowProvider`](../../references/pow-neon/classes/NeonPowProvider.md) to calculate the PoW when
 submitting blocks.
 The `NeonPowProvider` executes native code and calculates the PoW faster.
 
-The code above uses the the [`client.protocolInfo()`](../../references/client/classes/SingleNodeClient#protocolinfo)
+The code above uses the the [`client.protocolInfo()`](../../references/client/classes/SingleNodeClient.md#protocolinfo)
 function to retrieve metadata about the network, including the HRP for the BECH32 addresses, as mentioned when
 you [generated the public address](05-public-addresses.md):
 
@@ -89,7 +89,7 @@ The output details contain two different groups of information:
 
 * The **output details** include the type of output (`3` for value, i.e., basic outputs), the amount (in Glows), and the
   unlock conditions. You can observe that the unlock conditions contain
-  the [Ed22519 public key hash](../../references/client/interfaces/IEd25519Address#pubkeyhash) of your initial
+  the [Ed22519 public key hash](../../references/client/interfaces/IEd25519Address.md#pubkeyhash) of your initial
   address. That means that only the one who controls the private key corresponding to that public key hash can
   unlock this output and use the corresponding funds. The protocol defines other
   possible [unlock conditions](https://wiki.iota.org/shimmer/introduction/explanations/what_is_stardust/unlock_conditions)
