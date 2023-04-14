@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0-rc.2
+
+* Fix parsing of UInt32
+
 ## 2.0.0-rc.1
 
 * Stardust release candidate
