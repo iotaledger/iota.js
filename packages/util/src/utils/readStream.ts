@@ -162,10 +162,7 @@ export class ReadStream {
             throw new Error(`${name} length 4 exceeds the remaining data ${this.unused()}`);
         }
 
-        const val =
-            this._storage[this._readIndex] |
-            (this._storage[this._readIndex + 1] * 0x100) |
-            (this._storage[this._readIndex + 2] * 0x10000 + this._storage[this._readIndex + 3] * 0x1000000);
+        const val = Number(BigIntHelper.read4(this._storage, this._readIndex));
 
         if (moveIndex) {
             this._readIndex += 4;
